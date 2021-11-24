@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="remote-application-entity">MY_SCP</entry>
+    <entry key="remote-host">localhost</entry>
+    <entry key="remote-port">4100</entry>
+    <entry key="username"/>
+    <entry key="password"/>
+
+    <entry key="local-scu-application-entity">MY_SCU</entry>
+    <entry key="local-scu-modality-type">OT</entry>
+
+    <entry key="local-scp-application-entity">MY_SCP</entry>
+    <entry key="local-scp-host">localhost</entry>
+    <entry key="local-scp-port">4100</entry>
+
+    <entry key="storage-directory">./STORAGE</entry>
+    <entry key="accepted-calling-aets">MY_SCP,YOUR_SCP,SOME_PACS</entry>
+
+    <entry key="max-units-processed-in-sequence">1000</entry>
+    <entry key="max-units-processed-per-minute">60</entry>
+</properties>
