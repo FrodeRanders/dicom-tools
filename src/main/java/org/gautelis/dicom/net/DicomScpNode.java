@@ -21,7 +21,11 @@ import org.dcm4che3.net.Connection;
 import org.dcm4che3.net.Device;
 import org.dcm4che3.net.service.DicomServiceRegistry;
 import org.gautelis.dicom.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
@@ -29,6 +33,7 @@ import java.util.function.Consumer;
  * Service class provider (SCP) node
  */
 public class DicomScpNode extends DicomNode {
+    private static final Logger log = LoggerFactory.getLogger(DicomScuNode.class);
 
     private final DicomServiceRegistry serviceRegistry = new DicomServiceRegistry();
 
@@ -67,5 +72,31 @@ public class DicomScpNode extends DicomNode {
     public void shutdown() {
         scheduledExecutorService.shutdown();
         executorService.shutdown();
+    }
+
+    public void listen() {
+        log.debug("Binding connections");
+        withDevice(device -> {
+            try {
+                device.bindConnections();
+
+            } catch (IOException ioe) {
+                String info = "Failed to bind server behaviour: " + ioe.getMessage();
+                log.error(info, ioe);
+
+                throw new RuntimeException("Could not initiate server: " + info, ioe);
+
+            } catch (GeneralSecurityException gse) {
+                String info = "Not allowed to bind storage server behaviour: " + gse.getMessage();
+                log.error(info, gse);
+
+                throw new RuntimeException("Could not initiate server: " + info, gse);
+            }
+        });
+    }
+
+    public void unbind() {
+        log.debug("Unbinding connections");
+        withDevice(Device::unbindConnections);
     }
 }

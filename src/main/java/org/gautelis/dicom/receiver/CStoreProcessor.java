@@ -115,7 +115,7 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
         log.info("Prepared DICOMDIR writer");
     }
 
-    public String[] providesSOPClasses() {
+    public String[] getSOPClasses() {
         return acceptedSopClasses;
     }
 

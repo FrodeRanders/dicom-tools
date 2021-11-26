@@ -95,7 +95,7 @@ public class BreastDensityAnalyzer extends BasicCStoreSCP implements Provider {
         lateralityExpr = XPathExpression.relativeLaterality();
     }
 
-    public String[] providesSOPClasses() {
+    public String[] getSOPClasses() {
         return acceptedSOPClasses;
     }
 

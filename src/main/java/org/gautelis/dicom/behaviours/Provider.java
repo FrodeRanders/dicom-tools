@@ -16,16 +16,22 @@
  */
 package org.gautelis.dicom.behaviours;
 
-public interface Provider {
+import org.dcm4che3.net.service.DicomService;
+
+public interface Provider extends DicomService {
 
     /**
-     * A provider accepting structured reports, could return
-     * {UID.BasicTextSRStorage, UID.EnhancedSRStorage, UID.ComprehensiveSRStorage, UID.MammographyCADSRStorage}
+     * An array of accepted/supported SOP Classes.
+     * <p>
+     * A provider accepting structured reports, could return:
+     *    {UID.BasicTextSRStorage, UID.EnhancedSRStorage, UID.ComprehensiveSRStorage, UID.MammographyCADSRStorage}
      * where UID is org.dcm4che3.data.UID.
+     * <p>
+     * Same signature as org.dcm4che3.net.service.DicomService#getSOPClasses
      *
      * @return an array of SOP classes that is accepted
      */
-    String[] providesSOPClasses();
+    String[] getSOPClasses();
 
     void shutdown();
 }

@@ -49,13 +49,13 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
         // Prepare for callbacks
         scp.withServiceRegistry(registry -> registry.addDicomService(provider));
 
-        for (String cuid : provider.providesSOPClasses()) {
+        for (String cuid : provider.getSOPClasses()) {
             addOfferedStorageSOPClass(cuid);
         }
 
         scp.withApplicationEntity(ae -> ae.setAcceptedCallingAETitles(acceptedAETs));
 
-        listen();
+        scp.listen();
     }
 
     private void addOfferedStorageSOPClass(String cuid, String... tsuids) {
@@ -92,27 +92,6 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
         addOfferedStorageSOPClass(cuid, DicomScpNode.TRANSFER_SYNTAX_CHAIN);
     }
 
-    private void listen() {
-        log.debug("Binding (C-STORE) server connections");
-        scp.withDevice(device -> {
-            try {
-                device.bindConnections();
-
-            } catch (IOException ioe) {
-                String info = "Failed to bind storage server behaviour: " + ioe.getMessage();
-                log.error(info, ioe);
-
-                throw new RuntimeException("Kunde inte initiera serverdel: " + info, ioe);
-
-            } catch (GeneralSecurityException gse) {
-                String info = "Not allowed to bind storage server behaviour: " + gse.getMessage();
-                log.error(info, gse);
-
-                throw new RuntimeException("Kunde inte initiera serverdel: " + info, gse);
-            }
-        });
-    }
-
     public void shutdown() {
         try {
             if (null != provider) {
@@ -120,7 +99,7 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
             }
 
             log.debug("Unbinding provider connections");
-            scp.withDevice(Device::unbindConnections);
+            scp.unbind();
 
         } catch (Throwable t) {
             String info = "Failed to shutdown provider node: ";
