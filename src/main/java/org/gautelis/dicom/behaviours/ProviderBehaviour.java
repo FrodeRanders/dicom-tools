@@ -54,8 +54,6 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
         }
 
         scp.withApplicationEntity(ae -> ae.setAcceptedCallingAETitles(acceptedAETs));
-
-        scp.listen();
     }
 
     private void addOfferedStorageSOPClass(String cuid, String... tsuids) {
@@ -97,10 +95,6 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
             if (null != provider) {
                 provider.shutdown();
             }
-
-            log.debug("Unbinding provider connections");
-            scp.unbind();
-
         } catch (Throwable t) {
             String info = "Failed to shutdown provider node: ";
             Throwable cause = DicomScpNode.getBaseCause(t);

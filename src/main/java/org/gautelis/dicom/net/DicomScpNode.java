@@ -63,6 +63,8 @@ public class DicomScpNode extends DicomNode {
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         device.setScheduledExecutor(scheduledExecutorService);
+
+        listen();
     }
 
     public void withServiceRegistry(Consumer<DicomServiceRegistry> block) {
@@ -70,11 +72,12 @@ public class DicomScpNode extends DicomNode {
     }
 
     public void shutdown() {
+        unbind();
         scheduledExecutorService.shutdown();
         executorService.shutdown();
     }
 
-    public void listen() {
+    private void listen() {
         log.debug("Binding connections");
         withDevice(device -> {
             try {
@@ -95,7 +98,7 @@ public class DicomScpNode extends DicomNode {
         });
     }
 
-    public void unbind() {
+    private void unbind() {
         log.debug("Unbinding connections");
         withDevice(Device::unbindConnections);
     }

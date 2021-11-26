@@ -40,9 +40,7 @@ public class Controller {
         // The 'verifier' acts as both a SCU handled by DicomScuNode and
         // as a SCP handled by DicomScpNod, so we need both.
         scuNode = new DicomScuNode(dicomConfig);
-
         scpNode = new DicomScpNode(dicomConfig);
-        scpNode.listen();
 
         // The verifier handles PINGs, which we may both issue and receive in capacities as
         // both client (SCU) and server (SCP).

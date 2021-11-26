@@ -44,8 +44,6 @@ public class Controller {
     private final Configuration dicomConfig;
     private final List<String> shutdownRequests = new ArrayList<>();
 
-    private final ThrottledExecutor executor;
-
     private final DicomScuNode scuNode;
     private final DicomScpNode scpNode;
 
@@ -62,39 +60,32 @@ public class Controller {
 
         //
         dicomConfig = ConfigurationTool.bindProperties(Configuration.class, dicomProperties);
-        executor = new ThrottledExecutor(
-                dicomConfig.maxUnitsProcessedPerMinute(),
-                dicomConfig.maxUnitsProcessedInSequence(),
-                /* number acceptable errors */ 0,
-                /* semaphore */ shutdownRequests, shutdownRequests,
-                out
-        );
+
+        //
+        scpNode = new DicomScpNode(dicomConfig);
+        scuNode = new DicomScuNode(dicomConfig);
 
         // The breast density processor retrieves structured reports (SR) from the PACS,
         // which with this specific PACS means that we issue a MOVE operation and await
-        // the PACS C-STORE the SR back to us. Thus we have to operate as an SCP
-        // (i.e. a server), which is handled by DicomScpNode.
-        scpNode = new DicomScpNode(dicomConfig);
-
+        // the PACS C-STORE the SR back to us. Thus we have to operate as an SCP,
+        // which is handled by DicomScpNode.
         String[] acceptedAETs = dicomConfig.acceptedCallingAETitles().split(",");
         breastDensityAnalyzer = new ProviderBehaviour<>(scpNode, acceptedAETs, new BreastDensityAnalyzer(dicomConfig));
 
-        // The 'finder', the 'retriever' acts as SCUs (i.e. as clients), which
-        // is handled by DicomScuNode.
-        scuNode = new DicomScuNode(dicomConfig);
+        // The 'finder', the 'retriever' acts as SCUs, which is handled by DicomScuNode.
 
         finder = new FinderBehaviour(scuNode);
         retriever = new RetrieverBehaviour(scuNode);
 
-        // The verifier handles PINGs, which we may both issue and receive in capacities as both
-        // SCU (i.e. as a client) and SCP (i.e. as a server).
+        // The verifier handles PINGs, which we may both issue and receive in capacities as
+        // both SCU (i.e. as a client) and SCP (i.e. as a server).
         verifier = new VerificationBehaviour(scuNode, scpNode);
     }
 
     public void shutdown() {
         breastDensityAnalyzer.shutdown();
-        scpNode.shutdown();
         scuNode.shutdown();
+        scpNode.shutdown();
     }
 
     public boolean ping() {
@@ -383,118 +374,5 @@ public class Controller {
                 },
                 dicomConfig.localScpApplicationEntity()
         );
-    }
-
-    public void process(
-            String modality, final Date from, final Date to, final int maxUnitsToProcess, final PrintWriter out
-    ) {
-        int maxInSequence = dicomConfig.maxUnitsProcessedInSequence();
-        if (maxUnitsToProcess > 0) {
-            maxInSequence = maxUnitsToProcess;
-        }
-        log.info("Processing max " + maxInSequence + " item(s) in sequence");
-        out.flush();
-
-        ThrottledExecutor executor = new ThrottledExecutor(
-            dicomConfig.maxUnitsProcessedPerMinute(), maxInSequence, 0, this, shutdownRequests, out
-        );
-
-        //----------------------------------------------------------------------------------
-        // STEP 1: Process accession numbers (not already processed), retrieving study UIDs
-        //----------------------------------------------------------------------------------
-        long processedTotal = 0L;
-
-        log.info("--- LOOKUP: AccessionNumber -> StudyInstanceUID");
-        int[] processed = { 0 };
-        do {
-            out.println("Processing accession number(s) (" + processedTotal + " processed sofar)");
-            out.flush();
-
-            processed[0] = 0;
-
-            /////////// DEPENDS ON WHAT YOU WANT TO DO //////////////
-            // foreachUnprocessedAccessionNumber(accessionNumber -> {
-            //     findStudies(accessionNumber, modality, from, to);
-            //     ++processed[0];
-            // }, executor, out);
-            /////////////////////////////////////////////////////////
-
-            processedTotal += processed[0];
-
-        } while ((processed[0] > 0) &&
-                ((maxUnitsToProcess == 0) || ((maxUnitsToProcess > 0) && (processedTotal < maxUnitsToProcess))));
-
-        //
-        {
-            String info = "Processed a total of " + processedTotal + " accession numbers";
-            log.info(info);
-            out.println(info);
-            out.flush();
-        }
-
-        //----------------------------------------------------------------------------------
-        // STEP 2: Process studies (not already processed), retrieving series UIDs
-        //----------------------------------------------------------------------------------
-        processedTotal = 0L;
-
-        log.info("--- LOOKUP: StudyInstanceUID -> SeriesInstanceUID, Availability");
-        do {
-            out.println("Processing studies (" + processedTotal + " processed sofar)");
-            out.flush();
-
-            processed[0] = 0;
-
-            /////////// DEPENDS ON WHAT YOU WANT TO DO //////////////
-            // foreachUnprocessedStudy((accession, study) -> {
-            //     findSeries(accession, study, modality);
-            //     ++processed[0];
-            // }, executor, out);
-            /////////////////////////////////////////////////////////
-
-            processedTotal += processed[0];
-
-        } while (processed[0] > 0);
-
-        //
-        {
-            String info = "Processed a total of " + processedTotal + " studies";
-            log.info(info);
-            out.println(info);
-            out.flush();
-        }
-
-        //----------------------------------------------------------------------------------
-        // STEP 3: Process series (not already processed), retrieving instance UIDs
-        //----------------------------------------------------------------------------------
-        processedTotal = 0L;
-
-        log.info("--- RETRIEVE: StudyInstanceUID, SeriesInstanceUID for modality " + modality);
-        do {
-            out.println("Processing series (" + processedTotal + " processed sofar)");
-            out.flush();
-
-            processed[0] = 0;
-
-            /////////// DEPENDS ON WHAT YOU WANT TO DO //////////////
-            // foreachUnprocessedSeries(
-            //         (study, series) -> {
-            //             int status = retrieveSeries(study, series, modality);
-            //             ++processed[0];
-            //             return status;
-            //         },
-            //         executor, out);
-            /////////////////////////////////////////////////////////
-
-            processedTotal += processed[0];
-
-        } while (processed[0] > 0);
-
-        //
-        {
-            String info = "Processed a total of " + processedTotal + " series";
-            log.info(info);
-            out.println(info);
-            out.flush();
-        }
     }
 }
