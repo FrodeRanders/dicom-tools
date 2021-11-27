@@ -563,7 +563,7 @@ Going into some detail:
    - `@CodingSchemeDesignator='SRT'` and
    - `@CodeValue='F-01710'`
 4. `../ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020']` must match sibling element
-1. having to matching attributes
+1. having two matching attributes
    - `@CodingSchemeDesignator='SNM3'` and
    - `@CodeValue='T-04020'`
 
