@@ -16,7 +16,6 @@
  */
 package org.gautelis.dicom.behaviours;
 
-import org.dcm4che3.net.Device;
 import org.dcm4che3.net.TransferCapability;
 import org.dcm4che3.net.pdu.PresentationContext;
 import org.dcm4che3.net.pdu.RoleSelection;
@@ -24,9 +23,6 @@ import org.dcm4che3.net.service.BasicCStoreSCP;
 import org.gautelis.dicom.net.DicomScpNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
     private static final Logger log = LoggerFactory.getLogger(ProviderBehaviour.class);

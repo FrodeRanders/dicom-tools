@@ -382,6 +382,8 @@ public class Application {
             Date startDate = null;
             Date endDate = null;
 
+            // Under the hood, we will use two concurrent Associations to retrieve data
+            // in a nested fashion.
             controller[0].findStudies(accessionNumber, modality, startDate, endDate, studyInstanceUID -> {
                 controller[0].findSeries(studyInstanceUID, modality, (seriesInstanceUID, availability) -> {
                     //////////////////////////////////////////////////////////////////////////////////////

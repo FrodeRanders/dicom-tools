@@ -17,12 +17,16 @@
 package org.gautelis.dicom.net;
 
 import org.dcm4che3.data.UID;
-import org.dcm4che3.net.ApplicationEntity;
-import org.dcm4che3.net.Connection;
-import org.dcm4che3.net.Device;
-import org.dcm4che3.net.Status;
+import org.dcm4che3.net.*;
 import org.dcm4che3.net.pdu.AAssociateRQ;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
@@ -31,6 +35,8 @@ import java.util.function.Consumer;
 
  */
 public abstract class DicomNode {
+    private static final Logger log = LoggerFactory.getLogger(DicomScuNode.class);
+
     public static final String[] TRANSFER_SYNTAX_CHAIN = {
             UID.ExplicitVRLittleEndian,
             UID.ImplicitVRLittleEndian
@@ -42,6 +48,8 @@ public abstract class DicomNode {
 
     protected Device device;
     protected ApplicationEntity ae;
+
+    protected Map<String, DicomAssociation> associations = new HashMap<>();
 
     protected ExecutorService executorService;
     protected ScheduledExecutorService scheduledExecutorService;
@@ -59,7 +67,19 @@ public abstract class DicomNode {
         block.accept(ae);
     }
 
-    public abstract void shutdown();
+    public void shutdown() {
+        try {
+            for (DicomAssociation association : associations.values()) {
+                association.close();
+            }
+        } catch (Exception e) {
+            String info = "Could not successfully shutdown associations";
+            log.warn(info, e);
+        }
+
+        scheduledExecutorService.shutdown();
+        executorService.shutdown();
+    };
 
     public static String statusToString(int status) {
         switch (status) {
@@ -231,6 +251,20 @@ public abstract class DicomNode {
             default:
                 return "Unknown: " + status;
         }
+    }
+
+    public DicomAssociation open()
+            throws IOException, InterruptedException, IncompatibleConnectionException, GeneralSecurityException {
+
+        String id = UUID.randomUUID().toString();
+        DicomAssociation association = new DicomAssociation(id, ae.connect(local, remote, rq), this);
+        associations.put(id, association);
+        return association;
+    }
+
+    /* package private */
+    void release(DicomAssociation association) {
+        associations.remove(association.getId());
     }
 
     public static Throwable getBaseCause(Throwable t) {

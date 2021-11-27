@@ -23,6 +23,7 @@ import org.dcm4che3.net.pdu.PresentationContext;
 import org.dcm4che3.net.pdu.RoleSelection;
 import org.dcm4che3.net.service.BasicCEchoSCP;
 import org.dcm4che3.net.service.DicomServiceException;
+import org.gautelis.dicom.net.DicomAssociation;
 import org.gautelis.dicom.net.DicomScpNode;
 import org.gautelis.dicom.net.DicomScuNode;
 import org.slf4j.Logger;
@@ -99,12 +100,8 @@ public class VerificationBehaviour {
 
     public boolean verify() {
         try {
-            try {
-                scuNode.open();
-                return scuNode.echo();
-
-            } finally {
-                scuNode.close();
+            try (DicomAssociation association = scuNode.open()) {
+                return association.echo();
             }
         } catch (Throwable t) {
             String info = "Failed to verify connection to SCP: " + t.getMessage();

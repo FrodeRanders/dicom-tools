@@ -72,9 +72,8 @@ public class DicomScpNode extends DicomNode {
     }
 
     public void shutdown() {
+        super.shutdown();
         unbind();
-        scheduledExecutorService.shutdown();
-        executorService.shutdown();
     }
 
     private void listen() {

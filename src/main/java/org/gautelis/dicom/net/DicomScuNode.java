@@ -16,28 +16,21 @@
  */
 package org.gautelis.dicom.net;
 
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.Tag;
-import org.dcm4che3.net.*;
+import org.dcm4che3.net.ApplicationEntity;
+import org.dcm4che3.net.Connection;
+import org.dcm4che3.net.Device;
 import org.dcm4che3.net.pdu.UserIdentityRQ;
 import org.gautelis.dicom.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Optional;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 /*
  * Service class user (SCU) node
  */
 public class DicomScuNode extends DicomNode {
     private static final Logger log = LoggerFactory.getLogger(DicomScuNode.class);
-
-    // Transient!
-    private Association association = null;
 
     public DicomScuNode(Configuration dicomConfig) {
         // Client side representation of the connection
@@ -82,146 +75,5 @@ public class DicomScuNode extends DicomNode {
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         device.setScheduledExecutor(scheduledExecutorService);
-    }
-
-    public void shutdown() {
-        try {
-            close();
-
-        } catch (InterruptedException ie) {
-            String info = "Outstanding RSP problem: " + ie.getMessage();
-            log.warn(info);
-
-        } catch (IOException ioe) {
-            String info = "Could not disconnect: " + ioe.getMessage();
-            log.warn(info);
-        }
-
-        scheduledExecutorService.shutdown();
-        executorService.shutdown();
-    }
-
-
-    public void open()
-            throws IOException, InterruptedException, IncompatibleConnectionException, GeneralSecurityException {
-
-        if (null == association) {
-            association = ae.connect(local, remote, rq);
-        }
-    }
-
-    public void close() throws IOException, InterruptedException {
-        if (association != null && association.isReadyForDataTransfer()) {
-            association.waitForOutstandingRSP();
-            association.release();
-            association = null;
-        }
-    }
-
-    public boolean echo() {
-        if (null == association) {
-            log.error("No association: echo is futile -- please open() first");
-        }
-        else {
-            try {
-                DimseRSP rsp = association.cecho();
-                rsp.next(); // Consume
-
-                return true;
-
-            } catch (Throwable t) {
-                log.warn("Failed to issue ping: {}", t.getMessage(), t);
-            }
-        }
-        return false;
-    }
-
-    private void query(
-            String CUID, Attributes keys, DimseRSPHandler rspHandler
-    ) throws IOException, InterruptedException {
-        if (null == association) {
-            log.error("No association: query is futile -- please open() first");
-        }
-        else {
-            int priority = 0x0002; // LOW
-            association.cfind(CUID, priority, keys, null, rspHandler);
-        }
-    }
-
-    public void query(
-            String CUID, Attributes keys, Consumer<Attributes> block
-    ) throws IOException, InterruptedException {
-        if (null == association) {
-            log.error("No association: query is futile -- please open() first");
-        }
-        else {
-            query(CUID, keys, new DimseRSPHandler(association.nextMessageID()) {
-
-                @Override
-                public void onDimseRSP(Association as, Attributes cmd,
-                                       Attributes data) {
-
-                    int status = cmd.getInt(Tag.Status, -1);
-                    if (Status.Success != status && Status.Pending != status) {
-                        log.trace("C-FIND: Received DimseRSP: Command status: {} ({})",
-                                String.format("%04X", status & 0xFFFF), statusToString(status)
-                        );
-                    }
-
-                    super.onDimseRSP(as, cmd, data);
-
-                    if (Status.isPending(status)) {
-                        block.accept(data);
-                    }
-                }
-            });
-        }
-    }
-
-    private void retrieve(
-            String CUID, Attributes keys, String destinationAET, DimseRSPHandler rspHandler
-    ) throws IOException, InterruptedException {
-        if (null == association) {
-            log.error("No association: retrieve is futile -- please open() first");
-        }
-        else {
-            int priority = 0x0002; // LOW
-            association.cmove(CUID, priority, keys, null, destinationAET, rspHandler);
-        }
-    }
-
-    public Optional<Integer> retrieve(
-            String CUID, Attributes keys, String destinationAET
-    ) throws IOException, InterruptedException {
-        int[] status = {-1};
-
-        if (null == association) {
-            log.error("No association: retrieve is futile -- please open() first");
-        }
-        else {
-            retrieve(CUID, keys, destinationAET, new DimseRSPHandler(association.nextMessageID()) {
-
-                @Override
-                public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
-
-                    int _status = cmd.getInt(Tag.Status, -1);
-                    if (Status.Success != _status) {
-                        log.trace("C-MOVE: Received DimseRSP: Command status: {} ({})",
-                                String.format("%04X", _status & 0xFFFF), statusToString(_status)
-                        );
-                    }
-
-                    status[0] = _status;
-
-                    //
-                    super.onDimseRSP(as, cmd, data);
-                }
-            });
-        }
-
-        if (status[0] < 0) {
-            return Optional.empty();
-        }
-        return Optional.of(status[0]);
     }
 }

@@ -23,6 +23,7 @@ import org.dcm4che3.net.TransferCapability;
 import org.dcm4che3.net.pdu.ExtendedNegotiation;
 import org.dcm4che3.net.pdu.PresentationContext;
 import org.dcm4che3.net.pdu.RoleSelection;
+import org.gautelis.dicom.net.DicomAssociation;
 import org.gautelis.dicom.net.DicomScuNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,13 +110,9 @@ public class FinderBehaviour {
             Attributes keys = new Attributes();
             preparationBlock.accept(keys);
 
-            try {
-                // Search
-                node.open();
-                node.query(UID.StudyRootQueryRetrieveInformationModelFind, keys, resultHandlerBlock);
-
-            } finally {
-                node.close();
+            // Search
+            try (DicomAssociation association = node.open()) {
+                association.query(UID.StudyRootQueryRetrieveInformationModelFind, keys, resultHandlerBlock);
             }
         } catch (ConnectException ce) {
             String info = "Failed to connect to PACS: ";

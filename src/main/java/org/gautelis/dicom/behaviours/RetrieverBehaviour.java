@@ -21,6 +21,7 @@ import org.dcm4che3.data.UID;
 import org.dcm4che3.net.TransferCapability;
 import org.dcm4che3.net.pdu.PresentationContext;
 import org.dcm4che3.net.pdu.RoleSelection;
+import org.gautelis.dicom.net.DicomAssociation;
 import org.gautelis.dicom.net.DicomScuNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,12 +91,9 @@ public class RetrieverBehaviour {
             Attributes keys = new Attributes();
             preparationBlock.accept(keys);
 
-            try {
-                node.open();
-                return node.retrieve(UID.StudyRootQueryRetrieveInformationModelMove, keys, destinationAET);
-
-            } finally {
-                node.close();
+            // Retrieve
+            try (DicomAssociation association = node.open()) {
+                return association.retrieve(UID.StudyRootQueryRetrieveInformationModelMove, keys, destinationAET);
             }
         } catch (ConnectException ce) {
             String info = "Failed to connect: ";
