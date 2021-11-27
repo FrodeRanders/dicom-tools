@@ -1,9 +1,13 @@
 # Tools and utilities that facilitate the use of dcm4che3
 
-This library was used to pull structured reports for mammography readings from a GE PACS, 
-for analysis of inter reader agreement and for statistical analysis of breast density over
-a population (all readings for a whole year). As such, it was the largest analysis ever
-made on this type of data, based on mammography screening of women in a swedish county.
+This library was used to pull structured reports from manual mammography readings from a 
+GE PACS, for analysis of inter reader agreement and for statistical analysis of breast 
+density over a population (all readings for a whole year). As such, it was the largest 
+analysis ever made on this type of data, based on annual mammography screening of women 
+in Sweden.
+
+This statistics was used for base lining and tuning of an AI for assisted screening of
+mammography X-rays.
 
 Of interest, could be that we needed to instruct the GE PACS to MOVE the structured reports,
 resulting in a subsequent C-STORE. The analysis software thus had to expose SCP capabilities
