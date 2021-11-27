@@ -17,7 +17,6 @@
 package org.gautelis.dicom.net;
 
 import org.dcm4che3.net.ApplicationEntity;
-import org.dcm4che3.net.Connection;
 import org.dcm4che3.net.Device;
 import org.dcm4che3.net.service.DicomServiceRegistry;
 import org.gautelis.dicom.Configuration;
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /*
@@ -39,7 +37,6 @@ public class DicomScpNode extends DicomNode {
 
     public DicomScpNode(Configuration dicomConfig) {
         // Client side representation of the connection
-        Connection local = new Connection();
         local.setHostname(dicomConfig.localScpHost());
         local.setPort(dicomConfig.localScpPort());
 
@@ -56,14 +53,10 @@ public class DicomScpNode extends DicomNode {
         device.addConnection(local);
         device.addApplicationEntity(ae);
         device.setDimseRQHandler(serviceRegistry);
-
-        //
-        executorService = Executors.newCachedThreadPool();
         device.setExecutor(executorService);
-
-        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         device.setScheduledExecutor(scheduledExecutorService);
 
+        //
         listen();
     }
 

@@ -19,6 +19,7 @@ package org.gautelis.dicom.net;
 import org.dcm4che3.data.UID;
 import org.dcm4che3.net.*;
 import org.dcm4che3.net.pdu.AAssociateRQ;
+import org.gautelis.dicom.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
 
@@ -49,11 +51,9 @@ public abstract class DicomNode {
     protected Device device;
     protected ApplicationEntity ae;
 
-    protected Map<String, DicomAssociation> associations = new HashMap<>();
-
-    protected ExecutorService executorService;
-    protected ScheduledExecutorService scheduledExecutorService;
-
+    protected final Map<String, DicomAssociation> associations = new HashMap<>();
+    protected final ExecutorService executorService = Executors.newCachedThreadPool();
+    protected final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
     public void withDevice(Consumer<Device> block) {
         block.accept(device);

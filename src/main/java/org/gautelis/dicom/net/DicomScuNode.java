@@ -24,8 +24,6 @@ import org.gautelis.dicom.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Executors;
-
 /*
  * Service class user (SCU) node
  */
@@ -55,6 +53,8 @@ public class DicomScuNode extends DicomNode {
         device = new Device(dicomConfig.localScuApplicationEntity().toLowerCase());
         device.addConnection(local);
         device.addApplicationEntity(ae);
+        device.setExecutor(executorService);
+        device.setScheduledExecutor(scheduledExecutorService);
 
         // Configure association
         rq.setCallingAET(dicomConfig.localScuApplicationEntity());
@@ -68,12 +68,5 @@ public class DicomScuNode extends DicomNode {
                 && null != password && password.length() > 0) {
             rq.setUserIdentityRQ(UserIdentityRQ.usernamePasscode(username, password.toCharArray(), true));
         }
-
-        //
-        executorService = Executors.newCachedThreadPool();
-        device.setExecutor(executorService);
-
-        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        device.setScheduledExecutor(scheduledExecutorService);
     }
 }
