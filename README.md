@@ -1,5 +1,26 @@
 # Tools and utilities that facilitate the use of dcm4che3
 
+This library was used to pull structured reports for mammography readings from a GE PACS, 
+for analysis of inter reader agreement and for statistical analysis of breast density over
+a population (all readings for a whole year). As such, it was the largest analysis ever
+made on this type of data, based on mammography screening of women in a swedish county.
+
+Of interest, could be that we needed to instruct the GE PACS to MOVE the structured reports,
+resulting in a subsequent C-STORE. The analysis software thus had to expose SCP capabilities
+for "storing" the structured reports -- i.e. it had to act as a "fellow PACS". Of course, the
+software was doing statistical analysis on the data stream instead of actually storing it.
+
+This software adds an opinionated structure with DicomNode(s) on top of dcm4che3 and the
+notion of 'behaviours'. The result is a relatively easy setup that let's you focus on the
+interesting stuff right away. 
+
+Also, the epiphany that the DICOM format is internally structured as a tree -- possibly 
+spanning several individual files -- opens up the possibility of using ideas from XPath
+(which relates to tree structures in XML) to search within DICOM documents. The analysis
+of structured reports referred to above, where you have to find "patterns" within DICOM
+documents maps straight away to XPath. You will find a thorough description of this at the
+end of this README.
+
 ## Setting up a SCU/SCP-pair and ping! beetween them
 ```java
 import org.gautelis.dicom.behaviours.VerificationBehaviour;
