@@ -332,10 +332,7 @@ public class Controller {
                 if (log.isTraceEnabled()) {
                     DicomElement element = new DicomElement("series", attributes);
                     String text = element.asText(/* recurse? */ true);
-
-                    log.info("=========================================================================");
                     log.info(text);
-                    log.info("=========================================================================");
                 }
 
                 String seriesInstanceUID = attributes.getString(Tag.SeriesInstanceUID);
@@ -347,6 +344,7 @@ public class Controller {
     }
 }
 ```
+
 In this example we start with an accession number, looking up the study instance UID
 and then looking up the series instance UID:
 ```
@@ -417,26 +415,14 @@ public class Application {
     private static Configuration getConfig() {
         final Properties props = new Properties();
 
-        // SCU / client-side configuration
-        props.setProperty("local-scu-application-entity", "MY_SCU");
+        // Local SCU
+        props.setProperty("local-scu-application-entity", "MYSKO");
         props.setProperty("local-scu-modality-type", "OT");
-
-        // SCP / client-side configuration. This configuration must match the
-        // remote SCP configuration below -- otherwise the SCU will not be able
-        // to connect back to the (local) SCP.
-        props.setProperty("local-scp-application-entity", "MY_SCP");
-        props.setProperty("local-scp-host", "localhost");
-        props.setProperty("local-scp-port", "4101");
-
-        props.setProperty("storage-directory", "./STORAGE");
-
-        // The local SCP accepts connections from these application entities
-        props.setProperty("accepted-calling-aets", "MY_SCU,REMOTE_SCP,SOME_PACS");
-
-        // Remote SCP (which is actually same as local SCP :) as seen from the SCU
-        props.setProperty("remote-application-entity", "MY_SCP");
-        props.setProperty("remote-host", "localhost");
-        props.setProperty("remote-port", "4101");
+        
+        // Remote SCP 
+        props.setProperty("remote-application-entity", "PACS");
+        props.setProperty("remote-host", "pacs.remote.net");
+        props.setProperty("remote-port", "4100");
 
         return ConfigurationTool.bindProperties(Configuration.class, props);
     }
