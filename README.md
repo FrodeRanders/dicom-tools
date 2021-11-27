@@ -3,7 +3,7 @@ Tools and utilities that facilitate the use of dcm4che3
 ==================================================================
 
 ## Setting up a SCU/SCP-pair and ping! beetween them
-```{java}
+```java
 import org.gautelis.dicom.behaviours.VerificationBehaviour;
 import org.gautelis.dicom.net.DicomScpNode;
 import org.gautelis.dicom.net.DicomScuNode;
@@ -46,7 +46,7 @@ private final Configuration dicomConfig;
 }
 ```
 Which could be used as this
-```{java}
+```java
 
 final Properties dicomConfig = new Properties();
 
@@ -86,7 +86,7 @@ finally {
 ```
 
 ## Setting up a SCU and querying a remote SCP
-```{java}
+```java
 import org.dcm4che3.data.ElementDictionary;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.data.VR;
@@ -356,7 +356,7 @@ studyInstanceUID <- findStudies(accessionNumber, ...)
 seriesInstanceUID <- findSeries(studyInstanceUID, ...)
 ```
 like so:
-```{java}
+```java
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gautelis.dicom.Configuration;
