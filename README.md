@@ -238,10 +238,7 @@ public class Controller {
                 if (log.isTraceEnabled()) {
                     DicomElement element = new DicomElement("study", attributes);
                     String text = element.asText(/* recurse? */ true);
-
-                    log.trace("=========================================================================");
                     log.trace(text);
-                    log.trace("=========================================================================");
                 }
 
                 //
