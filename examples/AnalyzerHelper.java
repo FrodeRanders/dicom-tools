@@ -107,7 +107,14 @@ public class AnalyzerHelper {
     ) {
         finder.find(
             /*----------------------------------
-             * Setup keys for searching
+             * Setup keys for searching.
+             *
+             * Note!
+             *
+             *    Setting a value to NULL in a query
+             *    indicates to the SCP that you want
+             *    to fetch that value.
+             *
              *---------------------------------*/
             (keys) -> {
                 // Indicate character set
@@ -139,7 +146,6 @@ public class AnalyzerHelper {
                     if (null != startDate) {
                         String _startDate = org.gautelis.vopn.lang.Date.date2String(startDate, locale).replace("-", "");
                         rangeString += _startDate;
-
                     }
                     if (null != startDate || null != endDate) {
                         rangeString += "-";
@@ -150,8 +156,6 @@ public class AnalyzerHelper {
                     }
                     if (rangeString.length() > 0) {
                         keys.setString(tag, vr, rangeString);
-                    } else {
-                        keys.setNull(tag, vr);
                     }
                 }
 
@@ -161,8 +165,6 @@ public class AnalyzerHelper {
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
                     if (null != modality && modality.length() > 0) {
                         keys.setString(tag, vr, modality);
-                    } else {
-                        keys.setNull(tag, vr);
                     }
                 }
 
@@ -170,26 +172,7 @@ public class AnalyzerHelper {
                 {
                     int tag = Tag.StudyInstanceUID;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
-                }
-
-                // For logging purposes
-                {
-                    int tag = Tag.NumberOfStudyRelatedSeries;
-                    VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
-                }
-
-                {
-                    int tag = Tag.NumberOfStudyRelatedInstances;
-                    VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
-                }
-
-                {
-                    int tag = Tag.StudyDescription;
-                    VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return this value -- the goal of this method!
                 }
             },
 
@@ -229,7 +212,14 @@ public class AnalyzerHelper {
     ) {
         finder.find(
             /*----------------------------------
-             * Setup keys for searching
+             * Setup keys for searching.
+             *
+             * Note!
+             *
+             *    Setting a value to NULL in a query
+             *    indicates to the SCP that you want
+             *    to fetch that value.
+             *
              *---------------------------------*/
             (keys) -> {
                 // Indicate character set
@@ -259,8 +249,6 @@ public class AnalyzerHelper {
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
                     if (null != modality && modality.length() > 0) {
                         keys.setString(tag, vr, modality);
-                    } else {
-                        keys.setNull(tag, vr);
                     }
                 }
 
@@ -268,20 +256,7 @@ public class AnalyzerHelper {
                 {
                     int tag = Tag.SeriesInstanceUID;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
-                }
-
-                // For logging purposes
-                {
-                    int tag = Tag.SeriesDescription;
-                    VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
-                }
-
-                {
-                    int tag = Tag.NumberOfSeriesRelatedInstances;
-                    VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return this value -- the goal of this method!
                 }
             },
 

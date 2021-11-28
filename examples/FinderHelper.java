@@ -73,6 +73,26 @@ public class FinderHelper {
         finder.find(
             /*----------------------------------
              * Setup keys for searching
+             *
+             * Note!
+             *
+             *    Setting a value to NULL in a query
+             *    indicates to the SCP that you want
+             *    to fetch that value.
+             *
+             *    These values are not part of the
+             *    conditions of the query!
+             *
+             *    E.g. 'modality' below is either part
+             *    of the conditionals -- if you provide
+             *    a value for it -- or you ask the
+             *    SCP to return the corresponding
+             *    value.
+             *
+             *    Thus, in this example, we request more
+             *    information than we actually use
+             *    (or need)!
+             *
              *---------------------------------*/
             (keys) -> {
                 // Indicate character set
@@ -104,7 +124,6 @@ public class FinderHelper {
                     if (null != startDate) {
                         String _startDate = org.gautelis.vopn.lang.Date.date2String(startDate, locale).replace("-", "");
                         rangeString += _startDate;
-
                     }
                     if (null != startDate || null != endDate) {
                         rangeString += "-";
@@ -116,7 +135,7 @@ public class FinderHelper {
                     if (rangeString.length() > 0) {
                         keys.setString(tag, vr, rangeString);
                     } else {
-                        keys.setNull(tag, vr);
+                        keys.setNull(tag, vr); // ask SCP to return value
                     }
                 }
 
@@ -127,7 +146,7 @@ public class FinderHelper {
                     if (null != modality && modality.length() > 0) {
                         keys.setString(tag, vr, modality);
                     } else {
-                        keys.setNull(tag, vr);
+                        keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                     }
                 }
 
@@ -135,26 +154,26 @@ public class FinderHelper {
                 {
                     int tag = Tag.StudyInstanceUID;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return this value -- the goal of this method!
                 }
 
                 // For logging purposes
                 {
                     int tag = Tag.NumberOfStudyRelatedSeries;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                 }
 
                 {
                     int tag = Tag.NumberOfStudyRelatedInstances;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                 }
 
                 {
                     int tag = Tag.StudyDescription;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                 }
             },
 
@@ -194,7 +213,27 @@ public class FinderHelper {
     ) {
         finder.find(
             /*----------------------------------
-             * Setup keys for searching
+             * Setup keys for searching.
+             *
+             * Note!
+             *
+             *    Setting a value to NULL in a query
+             *    indicates to the SCP that you want
+             *    to fetch that value.
+             *
+             *    These values are not part of the
+             *    conditions of the query!
+             *
+             *    E.g. 'modality' below is either part
+             *    of the conditionals -- if you provide
+             *    a value for it -- or you ask the
+             *    SCP to return the corresponding
+             *    value.
+             *
+             *    Thus, in this example, we request more
+             *    information than we actually use
+             *    (or need)!
+             *
              *---------------------------------*/
             (keys) -> {
                 // Indicate character set
@@ -225,28 +264,28 @@ public class FinderHelper {
                     if (null != modality && modality.length() > 0) {
                         keys.setString(tag, vr, modality);
                     } else {
-                        keys.setNull(tag, vr);
+                        keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                     }
                 }
 
-                // Series instance UID?
+                // We are interested in series instance UID
                 {
                     int tag = Tag.SeriesInstanceUID;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return this value -- the goal of this method!
                 }
 
                 // For logging purposes
                 {
                     int tag = Tag.SeriesDescription;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                 }
 
                 {
                     int tag = Tag.NumberOfSeriesRelatedInstances;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    keys.setNull(tag, vr);
+                    keys.setNull(tag, vr); // ask SCP to return value, just so we may inspect it
                 }
             },
 
