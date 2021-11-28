@@ -416,7 +416,7 @@ public class Application {
             return String.format(format, Long.parseLong(number));
 
         } catch (NumberFormatException nfe) {
-            String info = String.format("Invalid accession number: %s", number);
+            String info = String.format("Invalid format %s with number %s", format, number);
             throw new RuntimeException(info, nfe);
         }
     }
