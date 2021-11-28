@@ -23,7 +23,7 @@ import org.gautelis.vopn.lang.ConfigurationTool;
 
 import java.util.Properties;
 
-public class Controller {
+public class Controller implements AutoCloseable {
     //
     private final Configuration dicomConfig;
 
@@ -47,9 +47,9 @@ public class Controller {
         verifier = new VerificationBehaviour(scuNode, scpNode);
     }
 
-    public void shutdown() {
-        scpNode.shutdown();
-        scuNode.shutdown();
+    public void close() {
+        scpNode.close();
+        scuNode.close();
     }
 
     public boolean ping() {

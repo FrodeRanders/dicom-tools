@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 /*
  * Service class user (SCU) node
  */
-public class DicomScuNode extends DicomNode {
+public class DicomScuNode extends DicomNode implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(DicomScuNode.class);
 
     public DicomScuNode(Configuration dicomConfig) {

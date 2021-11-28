@@ -37,15 +37,13 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class AnalyzerHelper {
+public class AnalyzerHelper implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(AnalyzerHelper.class);
 
     private final Locale locale;
 
     //
     private final Configuration dicomConfig;
-    private final List<String> shutdownRequests = new ArrayList<>();
-
     private final DicomScuNode scuNode;
     private final DicomScpNode scpNode;
 
@@ -62,8 +60,6 @@ public class AnalyzerHelper {
 
         //
         dicomConfig = ConfigurationTool.bindProperties(Configuration.class, dicomProperties);
-
-        //
         scpNode = new DicomScpNode(dicomConfig);
         scuNode = new DicomScuNode(dicomConfig);
 
@@ -74,8 +70,7 @@ public class AnalyzerHelper {
         String[] acceptedAETs = dicomConfig.acceptedCallingAETitles().split(",");
         breastDensityAnalyzer = new ProviderBehaviour<>(scpNode, acceptedAETs, new BreastDensityAnalyzer(dicomConfig));
 
-        // The 'finder', the 'retriever' acts as SCUs, which is handled by DicomScuNode.
-
+        // The 'finder' and the 'retriever' acts as SCUs, which is handled by DicomScuNode.
         finder = new FinderBehaviour(scuNode);
         retriever = new RetrieverBehaviour(scuNode);
 
@@ -84,10 +79,10 @@ public class AnalyzerHelper {
         verifier = new VerificationBehaviour(scuNode, scpNode);
     }
 
-    public void shutdown() {
-        breastDensityAnalyzer.shutdown();
-        scuNode.shutdown();
-        scpNode.shutdown();
+    public void close() {
+        breastDensityAnalyzer.close();
+        scuNode.close();
+        scpNode.close();
     }
 
     public boolean ping() {

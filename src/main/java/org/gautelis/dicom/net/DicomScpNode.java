@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 /*
  * Service class provider (SCP) node
  */
-public class DicomScpNode extends DicomNode {
+public class DicomScpNode extends DicomNode implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(DicomScuNode.class);
 
     private final DicomServiceRegistry serviceRegistry = new DicomServiceRegistry();
@@ -64,8 +64,8 @@ public class DicomScpNode extends DicomNode {
         block.accept(serviceRegistry);
     }
 
-    public void shutdown() {
-        super.shutdown();
+    public void close() {
+        super.close();
         unbind();
     }
 

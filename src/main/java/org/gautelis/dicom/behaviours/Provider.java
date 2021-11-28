@@ -18,7 +18,7 @@ package org.gautelis.dicom.behaviours;
 
 import org.dcm4che3.net.service.DicomService;
 
-public interface Provider extends DicomService {
+public interface Provider extends DicomService, AutoCloseable {
 
     /**
      * An array of accepted/supported SOP Classes.
@@ -33,5 +33,5 @@ public interface Provider extends DicomService {
      */
     String[] getSOPClasses();
 
-    void shutdown();
+    void close();
 }

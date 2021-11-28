@@ -119,7 +119,7 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
         return acceptedSopClasses;
     }
 
-    public void shutdown() {
+    public void close() {
         if (null != dicomDirWriter) {
             Closer.close(dicomDirWriter);
         }

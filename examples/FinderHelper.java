@@ -31,7 +31,7 @@ import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class FinderHelper {
+public class FinderHelper implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(FinderHelper.class);
 
     //
@@ -56,8 +56,8 @@ public class FinderHelper {
         finder = new FinderBehaviour(scuNode);
     }
 
-    public void shutdown() {
-        scuNode.shutdown();
+    public void close() {
+        scuNode.close();
     }
 
     /**

@@ -36,7 +36,7 @@ import java.util.function.Consumer;
 /*
 
  */
-public abstract class DicomNode {
+public abstract class DicomNode implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(DicomScuNode.class);
 
     public static final String[] TRANSFER_SYNTAX_CHAIN = {
@@ -67,7 +67,7 @@ public abstract class DicomNode {
         block.accept(ae);
     }
 
-    public void shutdown() {
+    public void close() {
         try {
             for (DicomAssociation association : associations.values()) {
                 association.close();

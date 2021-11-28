@@ -86,10 +86,10 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
         addOfferedStorageSOPClass(cuid, DicomScpNode.TRANSFER_SYNTAX_CHAIN);
     }
 
-    public void shutdown() {
+    public void close() {
         try {
             if (null != provider) {
-                provider.shutdown();
+                provider.close();
             }
         } catch (Throwable t) {
             String info = "Failed to shutdown provider node: ";

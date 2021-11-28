@@ -71,19 +71,12 @@ public class PingTest
         dicomConfig.setProperty("remote-host", "localhost");
         dicomConfig.setProperty("remote-port", "4101");
 
-        Controller controller = null;
-        try {
-            controller = new Controller(dicomConfig);
+        try (Controller controller = new Controller(dicomConfig)) {
             assertTrue(controller.ping());
-
             System.out.println("PING!");
         }
         catch (Throwable t) {
             fail(t.getMessage());
-        }
-        finally {
-            if (null != controller)
-                controller.shutdown();
         }
     }
 }

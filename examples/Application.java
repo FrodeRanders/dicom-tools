@@ -32,9 +32,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        final FinderHelper controller[] = { null };
-        try {
-            controller[0] = new FinderHelper(getConfig(), Locale.US);
+        try (FinderHelper helper = new FinderHelper(getConfig(), Locale.US)) {
 
             // Start with accession number
             final String accessionNumber = padNumber(ACCESSION_NUMBER_FORMAT, "42");
@@ -43,8 +41,8 @@ public class Application {
             Date startDate = null;
             Date endDate = null;
 
-            controller[0].findStudies(accessionNumber, modality, startDate, endDate, studyInstanceUID -> {
-                controller[0].findSeries(studyInstanceUID, modality, (seriesInstanceUID, availability) -> {
+            helper.findStudies(accessionNumber, modality, startDate, endDate, studyInstanceUID -> {
+                helper.findSeries(studyInstanceUID, modality, (seriesInstanceUID, availability) -> {
                     //////////////////////////////////////////////////////////////////////////////////////
                     // May run multiple times!
                     System.out.printf("Accession number: %s  modality: %s%n", accessionNumber, modality);
@@ -56,10 +54,6 @@ public class Application {
         }
         catch (Throwable t) {
             System.err.printf("Could not operate: %s%n", t.getMessage());
-        }
-        finally {
-            if (null != controller[0])
-                controller[0].shutdown();
         }
     }
 

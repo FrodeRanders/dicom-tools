@@ -99,8 +99,7 @@ public class BreastDensityAnalyzer extends BasicCStoreSCP implements Provider {
         return acceptedSOPClasses;
     }
 
-    public void shutdown() {
-    }
+    public void close() {}
 
     @Override
     protected void store(
