@@ -34,7 +34,7 @@ import org.gautelis.vopn.lang.ConfigurationTool;
 
 import java.util.Properties;
 
-public class Controller {
+public class Controller implements AutoCloseable {
 //
 private final Configuration dicomConfig;
 
@@ -58,9 +58,9 @@ private final Configuration dicomConfig;
         verifier = new VerificationBehaviour(scuNode, scpNode);
     }
 
-    public void shutdown() {
-        scpNode.shutdown();
-        scuNode.shutdown();
+    public void close() {
+        scpNode.close();
+        scuNode.close();
     }
 
     public boolean ping() {
@@ -92,18 +92,12 @@ dicomConfig.setProperty("remote-application-entity", "MY_SCP");
 dicomConfig.setProperty("remote-host", "localhost");
 dicomConfig.setProperty("remote-port", "4101");
 
-Controller controller = null;
-try {
-    controller = new Controller(dicomConfig);
+try (Controller controller = new Controller(dicomConfig)) {
     if (controller.ping()) 
         System.out.println("PING!");
 }
 catch (Throwable t) {
     System.err.println("Could not ping");
-}
-finally {
-    if (null != controller)
-        controller.shutdown();
 }
 
 ```
@@ -125,7 +119,7 @@ import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class Controller {
+public class Controller implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
     //
@@ -150,8 +144,8 @@ public class Controller {
         finder = new FinderBehaviour(scuNode);
     }
 
-    public void shutdown() {
-        scuNode.shutdown();
+    public void close() {
+        scuNode.close();
     }
 
     /**
@@ -391,10 +385,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        final Controller controller[] = { null };
-        try {
-            controller[0] = new Controller(getConfig(), Locale.US);
-
+        try (Controller controller = new Controller(getConfig(), Locale.US)) {
             // Start with accession number
             final String accessionNumber = padNumber(ACCESSION_NUMBER_FORMAT, "42");
             
@@ -404,8 +395,8 @@ public class Application {
 
             // Under the hood, we will use two concurrent Associations to retrieve data
             // in a nested fashion.
-            controller[0].findStudies(accessionNumber, modality, startDate, endDate, studyInstanceUID -> {
-                controller[0].findSeries(studyInstanceUID, modality, (seriesInstanceUID, availability) -> {
+            controller.findStudies(accessionNumber, modality, startDate, endDate, studyInstanceUID -> {
+                controller.findSeries(studyInstanceUID, modality, (seriesInstanceUID, availability) -> {
                     //////////////////////////////////////////////////////////////////////////////////////
                     // May run multiple times!
                     System.out.printf("Accession number: %s  modality: %s%n", accessionNumber, modality);
@@ -417,10 +408,6 @@ public class Application {
         }
         catch (Throwable t) {
             System.err.printf("Could not operate: %s%n", t.getMessage());
-        }
-        finally {
-            if (null != controller[0])
-                controller[0].shutdown();
         }
     }
 
