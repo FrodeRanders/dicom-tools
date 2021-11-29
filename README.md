@@ -3,8 +3,8 @@
 This library was used to pull structured reports from manual mammography readings from a 
 GE PACS, for analysis of inter reader agreement and for statistical analysis of breast 
 density over a population (all readings for a whole year). As such, it was the largest 
-analysis ever made on this type of data, based on annual mammography screening of women 
-in a county of Sweden.
+analysis ever made on this type of data, based on mammography screening of women 
+in Sweden where the results from one county and one year were studied.
 
 This statistics was used for baselining and tuning of an AI for assisted screening of
 mammography X-rays.
