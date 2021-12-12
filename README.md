@@ -18,9 +18,9 @@ This software adds an opinionated structure with DicomNode(s) on top of dcm4che3
 notion of 'behaviours'. The result is a relatively easy setup that let's you focus on the
 interesting stuff right away. 
 
-Also, the epiphany that the DICOM format is internally structured as a tree -- possibly 
-spanning several individual files -- opens up the possibility of using ideas from XPath
-(which relates to tree structures in XML) to search within DICOM documents. The analysis
+Also, the fact that DICOM structured reports are internally structured as a tree -- 
+possibly spanning several individual files -- opens up the possibility of using ideas from 
+XPath (which relates to tree structures in XML) to search within DICOM documents. The analysis
 of structured reports referred to above, where you have to find "patterns" within DICOM
 documents maps straight away to XPath. You will find a thorough description of this at the
 end of this README.
@@ -439,7 +439,11 @@ public class Application {
 ```
 
 ## Search DICOM files using XPath expressions
-This project wraps functionality for searching DICOM files using XPath expressions.
+This project wraps functionality for searching DICOM files using XPath expressions. 
+As described in chapter 4 in "DICOM Structured Reporting" by David A. Clunie, a 
+structured report exhibits an internal structure of a tree, so it makes sense 
+to match this reality with ideas addressing tree structures. Searching XML using
+XPath is one such pattern. 
 
 The expressions are XPath alright (using the Jaxen parser and
 machinery), but in order to adapt to the DICOM concepts, I had to
@@ -463,7 +467,7 @@ the bits an pieces you need.
 
 Searching for a DICOM tag is currently done via it's name and not
 it's id number. Using the composite (group.element) clashes with
-the XPath parser, but using the plain number could be an alternative
+the XPath parser -- using the plain number could be an alternative
 
 Using the DICOM Visualizr (a sibling project), this is the tree that
 we are searching in and the lone DicomElement we are searching for:
