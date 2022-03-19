@@ -3,22 +3,22 @@
 This library was used to pull structured reports from manual mammography readings from a 
 GE PACS, for analysis of inter reader agreement and for statistical analysis of breast 
 density over a population (all readings for a whole year). As such, it was the largest 
-analysis ever made on this type of data, based on mammography screening of women 
-in Sweden where the results from one county and one year were studied.
+analysis ever made on this type of data, based on mammography screening of 14.000 women.
 
 This statistics was used for baselining and tuning of an AI for assisted screening of
 mammography X-rays.
 
-Of interest, could be that we needed to instruct the GE PACS to MOVE the structured reports,
-resulting in a subsequent C-STORE. The analysis software thus had to expose SCP capabilities
-for "storing" the structured reports -- i.e. it had to act as a "fellow PACS". Of course, the
-software was doing statistical analysis on the data stream instead of actually storing it.
+This software adds some structure on top of dcm4che3 and introduces the notion of 'behaviours'. 
+The result is a relatively easy setup that lets you focus on the interesting stuff right away,
+without tedious setup. 
 
-This software adds an opinionated structure with DicomNode(s) on top of dcm4che3 and the
-notion of 'behaviours'. The result is a relatively easy setup that let's you focus on the
-interesting stuff right away. 
+Particular to GE PACS, we had to issue a MOVE in order to access the structured reports. 
+The GE PACS will then issue a subsequent C-STORE back to us, which has the effect that we
+have to operate as an SCP as well as an SCU. The analysis software thus has to expose SCP
+capabilities for "storing" the structured reports. Of course, the software was doing 
+statistical analysis on the data stream instead of actually storing it.
 
-Also, the fact that DICOM structured reports are internally structured as a tree -- 
+The fact that DICOM structured reports are internally structured as a tree -- 
 possibly spanning several individual files -- opens up the possibility of using ideas from 
 XPath (which relates to tree structures in XML) to search within DICOM documents. The analysis
 of structured reports referred to above, where you have to find "patterns" within DICOM
