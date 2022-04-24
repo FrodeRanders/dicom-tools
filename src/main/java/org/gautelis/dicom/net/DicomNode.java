@@ -79,7 +79,7 @@ public abstract class DicomNode implements AutoCloseable {
 
         scheduledExecutorService.shutdown();
         executorService.shutdown();
-    };
+    }
 
     public static String statusToString(int status) {
         switch (status) {

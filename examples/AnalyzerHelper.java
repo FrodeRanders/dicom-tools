@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+
+import mammography.BreastDensityAnalyzer;
 
 import org.dcm4che3.data.ElementDictionary;
 import org.dcm4che3.data.Tag;
@@ -24,7 +25,6 @@ import org.gautelis.dicom.behaviours.FinderBehaviour;
 import org.gautelis.dicom.behaviours.ProviderBehaviour;
 import org.gautelis.dicom.behaviours.RetrieverBehaviour;
 import org.gautelis.dicom.behaviours.VerificationBehaviour;
-import org.gautelis.dicom.mammography.BreastDensityAnalyzer;
 import org.gautelis.dicom.model.DicomElement;
 import org.gautelis.dicom.net.DicomScpNode;
 import org.gautelis.dicom.net.DicomScuNode;

@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  */
@@ -220,16 +221,9 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
     }
 
     private static Attributes parse(File file) throws IOException {
-        try (DicomInputStream in = new DicomInputStream(file)) {
-            in.setIncludeBulkData(DicomInputStream.IncludeBulkData.NO);
-            return in.readDataset(/* length */ -1, /* stop tag */ Tag.PixelData); // -1 | Tag.PixelData
-            /*
-             * Above is deprecated, should be replaced with something like
-             *
-            Predicate<DicomInputStream> tagGEQPixelData =
-                    dis -> Integer.compareUnsigned(dis.tag(), Tag.PixelData) >= 0;
-            return in.readDataset(-1, tagGEQPixelData);
-            */
+        try (DicomInputStream dicomInputStream = new DicomInputStream(file)) {
+            dicomInputStream.setIncludeBulkData(DicomInputStream.IncludeBulkData.NO);
+            return dicomInputStream.readDatasetUntilPixelData();
         }
     }
 

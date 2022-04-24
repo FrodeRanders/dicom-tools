@@ -227,7 +227,7 @@ public class DicomDocument {
         }
 
         // Create index over all entries
-        private static Map<String, Type> index = new HashMap<>();
+        private static final Map<String, Type> index = new HashMap<>();
         static {
             for (Type type : Type.values()) {
                 index.put(type.getSopUID(), type);

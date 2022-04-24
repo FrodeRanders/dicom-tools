@@ -29,10 +29,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Loads DICOMDIR files
@@ -128,8 +130,8 @@ public class DicomdirLoader extends DicomLoader {
                             log.info(info);
 
                             if (loadReferencedFiles) {
-                                try (DicomInputStream dicomInputStream = new DicomInputStream(new FileInputStream(referencedFile))) {
-                                    Attributes ds = dicomInputStream.readDataset(-1, -1);
+                                try (DicomInputStream dicomInputStream = new DicomInputStream(Files.newInputStream(referencedFile.toPath()))) {
+                                    Attributes ds = dicomInputStream.readDataset();
                                     loadedFiles.add(DicomLoader.defaultFileLoader.load(ds, referencedFile, dicomdirFile.getRootElement()));
                                 }
                             }
@@ -164,8 +166,8 @@ public class DicomdirLoader extends DicomLoader {
                             log.info(info);
 
                             if (loadReferencedFiles) {
-                                try (DicomInputStream dicomInputStream = new DicomInputStream(new FileInputStream(referencedFile))) {
-                                    Attributes ds = dicomInputStream.readDataset(-1, -1);
+                                try (DicomInputStream dicomInputStream = new DicomInputStream(Files.newInputStream(referencedFile.toPath()))) {
+                                    Attributes ds = dicomInputStream.readDataset();
                                     DicomElement owner = dicomdirFile.getRootElement();
 
                                     // Load referenced document

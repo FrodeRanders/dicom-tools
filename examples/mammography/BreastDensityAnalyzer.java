@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gautelis.dicom.mammography;
+package mammography;
 
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;

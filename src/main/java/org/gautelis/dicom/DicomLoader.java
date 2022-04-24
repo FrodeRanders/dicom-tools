@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.function.Predicate;
 
 /**
  * Loads DICOM files
@@ -70,8 +72,8 @@ public class DicomLoader {
      * @throws InconsistencyException In case of inconsistencies.
      */
     public void load(final FileLoader loader, final File file, final DicomElement parent) throws IOException, InconsistencyException {
-        try (DicomInputStream dicomInputStream = new DicomInputStream(new FileInputStream(file))) {
-            Attributes ds = dicomInputStream.readDataset(-1, -1);
+        try (DicomInputStream dicomInputStream = new DicomInputStream(Files.newInputStream(file.toPath()))) {
+            Attributes ds = dicomInputStream.readDataset();
             dicomDocument = loader.load(ds, file, parent);
         }
     }
@@ -88,16 +90,7 @@ public class DicomLoader {
      */
     public void load(final StreamLoader loader, final String name, final InputStream inputStream, final DicomElement parent) throws IOException, InconsistencyException {
         try (DicomInputStream dicomInputStream = new DicomInputStream(inputStream)) {
-            Attributes ds = dicomInputStream.readDataset(-1, -1);
-
-            /*
-             * Above is deprecated, should be replaced with something like
-             *
-            Predicate<DicomInputStream> allTags =
-                   dis -> Integer.compareUnsigned(dis.tag(), -1) >= 0;
-            ds = dicomInputStream.readDataset(-1, allTags);
-            */
-
+            Attributes ds = dicomInputStream.readDataset();
             dicomDocument = loader.load(ds, name, parent, /* no file, so no path */ null);
         }
     }

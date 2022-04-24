@@ -49,7 +49,6 @@ public class PingTest
 
         final Properties dicomConfig = new Properties();
 
-
         // SCU / client-side configuration
         dicomConfig.setProperty("local-scu-application-entity", "MY_SCU");
         dicomConfig.setProperty("local-scu-modality-type", "OT");

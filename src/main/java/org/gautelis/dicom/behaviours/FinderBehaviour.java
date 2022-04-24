@@ -64,7 +64,8 @@ public class FinderBehaviour {
                 DicomScuNode.TRANSFER_SYNTAX_CHAIN
         );
 
-        if (false && null == tc.getQueryOptions()) {
+        /*
+        if (null == tc.getQueryOptions()) {
 
             EnumSet<QueryOption> queryOptions = EnumSet.noneOf(QueryOption.class);
             if (!queryOptions.isEmpty()) {
@@ -80,6 +81,8 @@ public class FinderBehaviour {
                 );
             }
         }
+        */
+
         node.withApplicationEntity(ae -> ae.addTransferCapability(tc));
 
         node.withAAssociateRQ(rq -> {
