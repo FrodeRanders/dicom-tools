@@ -18,9 +18,7 @@ package org.gautelis.dicom.behaviours;
 
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.UID;
-import org.dcm4che3.net.QueryOption;
 import org.dcm4che3.net.TransferCapability;
-import org.dcm4che3.net.pdu.ExtendedNegotiation;
 import org.dcm4che3.net.pdu.PresentationContext;
 import org.dcm4che3.net.pdu.RoleSelection;
 import org.gautelis.dicom.net.DicomAssociation;
@@ -29,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.ConnectException;
-import java.util.EnumSet;
 import java.util.function.Consumer;
 
 /*

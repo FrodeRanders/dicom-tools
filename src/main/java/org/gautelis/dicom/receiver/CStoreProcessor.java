@@ -41,9 +41,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-import java.util.function.Predicate;
 
 /**
+ *
  */
 public class CStoreProcessor extends BasicCStoreSCP implements Provider {
     private static final Logger log = LoggerFactory.getLogger(CStoreProcessor.class);
@@ -59,10 +59,10 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
 
     /**
      * Example of various types of images
-     *   UID.CTImageStorage,
-     *   UID.MRImageStorage,
-     *   UID.UltrasoundImageStorage,
-     *   UID.ComputedRadiographyImageStorage
+     * UID.CTImageStorage,
+     * UID.MRImageStorage,
+     * UID.UltrasoundImageStorage,
+     * UID.ComputedRadiographyImageStorage
      *
      * @param dicomConfig
      * @param acceptedSopClasses
@@ -132,45 +132,40 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
             PDVInputStream data, Attributes rsp
     ) throws IOException {
 
-        try {
-            String cuid = rq.getString(Tag.AffectedSOPClassUID);
-            String iuid = rq.getString(Tag.AffectedSOPInstanceUID);
-            String tsuid = pc.getTransferSyntax();
+        String cuid = rq.getString(Tag.AffectedSOPClassUID);
+        String iuid = rq.getString(Tag.AffectedSOPInstanceUID);
+        String tsuid = pc.getTransferSyntax();
 
-            File file = new File(storageDir, iuid);
-            if (file.exists() && file.length() > 0L) {
-                String info = "File already exists: " + file.getAbsolutePath() + " [skipping]";
-                log.warn(info);
-                data.skipAll();
-            } else {
-                try {
-                    Attributes fmi = as.createFileMetaInformation(iuid, cuid, tsuid);
-                    storeTo(as, fmi, data, file);
+        File file = new File(storageDir, iuid);
+        if (file.exists() && file.length() > 0L) {
+            String info = "File already exists: " + file.getAbsolutePath() + " [skipping]";
+            log.warn(info);
+            data.skipAll();
+        } else {
+            try {
+                Attributes fmi = as.createFileMetaInformation(iuid, cuid, tsuid);
+                storeTo(as, fmi, data, file);
 
-                    Attributes attrs = parse(file);
+                Attributes attrs = parse(file);
 
-                    File dest = getDestinationFile(attrs); // using pattern
-                    renameTo(as, file, dest);
-                    file = dest;
+                File dest = getDestinationFile(attrs); // using pattern
+                renameTo(as, file, dest);
+                file = dest;
 
-                    if (addDicomDirRecords(attrs, fmi, file)) {
-                        log.info("{}: M-UPDATE {}", as, dicomDirWriter.getFile());
-                    } else {
-                        log.info("{}: ignoring duplicate object", as);
-                        deleteFile(file);
-                    }
-                } catch (Exception e) {
-                    String info = "Failed to store file: " + file.getName();
-                    info += ": " + e.getMessage();
-                    log.warn(info);
-
+                if (addDicomDirRecords(attrs, fmi, file)) {
+                    log.info("{}: M-UPDATE {}", as, dicomDirWriter.getFile());
+                } else {
+                    log.info("{}: ignoring duplicate object", as);
                     deleteFile(file);
-                    throw new DicomServiceException(Status.ProcessingFailure, e);
                 }
+            } catch (Exception e) {
+                String info = "Failed to store file: " + file.getName();
+                info += ": " + e.getMessage();
+                log.warn(info);
+
+                deleteFile(file);
+                throw new DicomServiceException(Status.ProcessingFailure, e);
             }
-        } catch (Throwable t) {
-            String info = "Failed to receive data: " + t.getMessage();
-            log.warn(info, t);
         }
     }
 
@@ -185,8 +180,7 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
         }
     }
 
-    private static void storeTo(Association as, Attributes fmi, PDVInputStream data, File file)
-            throws IOException {
+    private static void storeTo(Association as, Attributes fmi, PDVInputStream data, File file) throws IOException {
 
         log.info("{}: M-WRITE {}", as, file);
         if (!file.getParentFile().mkdirs()) {

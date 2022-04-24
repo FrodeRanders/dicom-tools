@@ -19,7 +19,6 @@ package org.gautelis.dicom.net;
 import org.dcm4che3.data.UID;
 import org.dcm4che3.net.*;
 import org.dcm4che3.net.pdu.AAssociateRQ;
-import org.gautelis.dicom.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

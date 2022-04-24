@@ -16,7 +16,6 @@
  */
 
 import mammography.BreastDensityAnalyzer;
-
 import org.dcm4che3.data.ElementDictionary;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.data.VR;
@@ -33,7 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
