@@ -3,9 +3,8 @@
 This software was used to pull structured reports from manual mammography readings from a 
 GE PACS for analysis of inter reader agreement and for statistical analysis of breast 
 density over a population. As such, it was the largest analysis ever made on this type of 
-data, based on mammography screening of 14.000 women (readings for a year).
-
-This statistics was used for baselining and tuning of an AI for assisted screening of
+data, based on mammography screening of 14.000 women (readings for a year). The statistics
+was used by General Electrics for baselining and tuning an AI for assisted screening of 
 mammography X-rays.
 
 This software adds some structure on top of dcm4che3 and introduces the notion of 'behaviours'. 
