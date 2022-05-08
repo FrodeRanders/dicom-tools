@@ -449,6 +449,8 @@ The expressions are XPath alright (using the Jaxen parser and
 machinery), but in order to adapt to the DICOM concepts, I had to
 implement an XML-ish model onto DICOM.
 
+![Image](doc/xml-like-structure-onto-dicom.png?raw=true)
+
 You will find a DicomDocument, which corresponds to a DICOM file such
 as DICOMDIR. You will further find a DicomElement, which corresponds
 to individual sequences in the DICOM file. I also had to map
@@ -471,6 +473,7 @@ the XPath parser -- using the plain number could be an alternative
 
 Using the DICOM Visualizr (a sibling project), this is the tree that
 we are searching in and the lone DicomElement we are searching for:
+
 ![Image](doc/screencapture.png?raw=true)
 
 ## Really simple examples
