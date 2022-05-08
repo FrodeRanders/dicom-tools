@@ -50,10 +50,10 @@ import java.util.function.Consumer;
 public class RetrieverBehaviour {
     private static final Logger log = LoggerFactory.getLogger(RetrieverBehaviour.class);
 
-    private final DicomScuNode node;
+    private final DicomScuNode scuNode;
 
-    public RetrieverBehaviour(DicomScuNode node) throws IOException {
-        this.node = node;
+    public RetrieverBehaviour(DicomScuNode scuNode) throws IOException {
+        this.scuNode = scuNode;
 
         TransferCapability tc = new TransferCapability(
                 null, UID.StudyRootQueryRetrieveInformationModelMove,
@@ -61,9 +61,9 @@ public class RetrieverBehaviour {
                 DicomScuNode.TRANSFER_SYNTAX_CHAIN
         );
 
-        node.withApplicationEntity(ae -> ae.addTransferCapability(tc));
+        scuNode.withApplicationEntity(ae -> ae.addTransferCapability(tc));
 
-        node.withAAssociateRQ(rq -> {
+        scuNode.withAAssociateRQ(rq -> {
             rq.addPresentationContext(
                     new PresentationContext(
                             rq.getNumberOfPresentationContexts() * 2 + 1,
@@ -92,7 +92,7 @@ public class RetrieverBehaviour {
             preparationBlock.accept(keys);
 
             // Retrieve
-            try (DicomAssociation association = node.open()) {
+            try (DicomAssociation association = scuNode.open()) {
                 return association.retrieve(UID.StudyRootQueryRetrieveInformationModelMove, keys, destinationAET);
             }
         } catch (ConnectException ce) {

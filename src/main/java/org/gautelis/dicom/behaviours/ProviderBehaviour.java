@@ -27,34 +27,34 @@ import org.slf4j.LoggerFactory;
 public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
     private static final Logger log = LoggerFactory.getLogger(ProviderBehaviour.class);
 
-    private final DicomScpNode scp;
+    private final DicomScpNode scpNode;
     private final T provider;
 
     /**
      * Initiates a provider behaviour, backed by a provider that accepts a set of SOP classes.
-     * @param scp
+     * @param scpNode
      * @param acceptedAETs
      * @param provider
      */
     public ProviderBehaviour(
-            DicomScpNode scp, String[] acceptedAETs, T provider
+            DicomScpNode scpNode, String[] acceptedAETs, T provider
     ) {
-        this.scp = scp;
+        this.scpNode = scpNode;
         this.provider = provider;
 
         // Prepare for callbacks
-        scp.withServiceRegistry(registry -> registry.addDicomService(provider));
+        scpNode.withServiceRegistry(registry -> registry.addDicomService(provider));
 
         for (String cuid : provider.getSOPClasses()) {
             addOfferedStorageSOPClass(cuid);
         }
 
-        scp.withApplicationEntity(ae -> ae.setAcceptedCallingAETitles(acceptedAETs));
+        scpNode.withApplicationEntity(ae -> ae.setAcceptedCallingAETitles(acceptedAETs));
     }
 
     private void addOfferedStorageSOPClass(String cuid, String... tsuids) {
 
-        scp.withApplicationEntity(ae -> {
+        scpNode.withApplicationEntity(ae -> {
             if (null == ae.getTransferCapabilityFor(cuid, TransferCapability.Role.SCP)) {
 
                 TransferCapability tc = new TransferCapability(
@@ -67,7 +67,7 @@ public class ProviderBehaviour<T extends BasicCStoreSCP & Provider> {
             }
         });
 
-        scp.withAAssociateRQ(rq -> {
+        scpNode.withAAssociateRQ(rq -> {
             if (!rq.containsPresentationContextFor(cuid)) {
                 rq.addPresentationContext(
                         new PresentationContext(

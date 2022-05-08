@@ -12,18 +12,13 @@ This software adds some structure on top of dcm4che3 and introduces the notion o
 The result is a relatively easy setup that lets you focus on the interesting stuff right away,
 without tedious setup. 
 
+![Image](doc/behaviours-annotated.png?raw=true)
+
 Particular to GE PACS, we had to issue a MOVE in order to access the structured reports. 
 The GE PACS will then issue a subsequent C-STORE back to us, which has the effect that we
 have to operate as an SCP as well as an SCU. The analysis software thus has to expose SCP
 capabilities for "storing" the structured reports. Of course, the software was doing 
 statistical analysis on the data stream instead of actually storing it.
-
-The fact that DICOM structured reports are internally structured as a tree -- 
-possibly spanning several individual files -- opens up the possibility of using ideas from 
-XPath (which relates to tree structures in XML) to search within DICOM documents. The analysis
-of structured reports referred to above, where you have to find "patterns" within DICOM
-documents maps straight away to XPath. You will find a thorough description of this at the
-end of this README.
 
 ## Setting up a SCU/SCP-pair and ping! beetween them
 ```java
@@ -439,6 +434,12 @@ public class Application {
 ```
 
 ## Search DICOM files using XPath expressions
+The fact that DICOM structured reports are internally structured as a tree --
+possibly spanning several individual files -- opens up the possibility of using ideas from
+XPath (which relates to tree structures in XML) to search within DICOM documents. The analysis
+of structured reports, where you have to find "patterns" within DICOM documents maps straight 
+away to XPath. 
+
 This project wraps functionality for searching DICOM files using XPath expressions. 
 As described in chapter 4 in "DICOM Structured Reporting" by David A. Clunie, a 
 structured report exhibits an internal structure of a tree, so it makes sense 

@@ -38,10 +38,12 @@ public class VerificationBehaviour {
     private static final Logger log = LoggerFactory.getLogger(VerificationBehaviour.class);
 
     private final DicomScuNode scuNode;
+    private final DicomScpNode scpNode;
 
     public VerificationBehaviour(DicomScuNode scuNode, DicomScpNode scpNode) {
 
         this.scuNode = scuNode;
+        this.scpNode = scpNode;
 
         // Define transfer capabilities for verification SOP class on both SCP as well as SCU side
         scpNode.withApplicationEntity(ae -> ae.addTransferCapability(new TransferCapability(null,
