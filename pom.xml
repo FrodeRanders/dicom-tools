@@ -15,10 +15,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>9</maven.compiler.source>
     <maven.compiler.target>9</maven.compiler.target>
-    <dcm4che4.version>5.26.0</dcm4che4.version>
+    <dcm4che4.version>5.29.2</dcm4che4.version>
     <log4j.version>[2.17.0,)</log4j.version>
-    <slf4j.version>1.7.36</slf4j.version>
-    <jaxen.version>1.2.0</jaxen.version>
+    <slf4j.version>2.0.7</slf4j.version>
+    <jaxen.version>2.0.0</jaxen.version>
   </properties>
 
   <repositories>
