@@ -248,7 +248,7 @@ public class DicomDocument {
         }
     }
 
-    private Type type = Type.Unknown;
+    private Type type;
     private final String name;
     private final String path;
     private final DicomElement rootElement;

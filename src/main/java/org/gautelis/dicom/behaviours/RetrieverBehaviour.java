@@ -52,7 +52,7 @@ public class RetrieverBehaviour {
 
     private final DicomScuNode scuNode;
 
-    public RetrieverBehaviour(DicomScuNode scuNode) throws IOException {
+    public RetrieverBehaviour(DicomScuNode scuNode) {
         this.scuNode = scuNode;
 
         TransferCapability tc = new TransferCapability(

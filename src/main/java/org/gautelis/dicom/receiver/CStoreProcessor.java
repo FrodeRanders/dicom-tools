@@ -78,7 +78,7 @@ public class CStoreProcessor extends BasicCStoreSCP implements Provider {
 
         //
         String directory = dicomConfig.storageDirectory();
-        if (null == directory || directory.length() == 0) {
+        if (null == directory || directory.isEmpty()) {
             directory = new File(new File(System.getenv("user.dir")), "STORAGE").getAbsolutePath();
         }
         storageDir = new File(directory);

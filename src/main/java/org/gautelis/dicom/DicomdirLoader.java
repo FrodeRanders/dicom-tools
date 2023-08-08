@@ -92,22 +92,21 @@ public class DicomdirLoader extends DicomLoader {
         Sequence sequence = dataset.getSequence(TagUtils.toTag(0x0004, 0x1220));
         if (null != sequence) {
             for (Attributes recordInSequence : sequence) {
-                Attributes record = recordInSequence;
-                String recordType = DicomElement.directoryRecordType(record);
+                String recordType = DicomElement.directoryRecordType(recordInSequence);
 
                 switch (recordType) {
                     case "PATIENT":
-                        assign(data, "PatientID", DicomElement.patientID(record));
+                        assign(data, "PatientID", DicomElement.patientID(recordInSequence));
                         break;
 
                     case "STUDY":
-                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(record));
+                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(recordInSequence));
                         break;
 
                     case "SR DOCUMENT": {
                         // In case information is replicated
-                        assign(data, "PatientID", DicomElement.patientID(record));
-                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(record));
+                        assign(data, "PatientID", DicomElement.patientID(recordInSequence));
+                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(recordInSequence));
 
                         /*
                         String sopInstanceUid = DicomObject.sopInstanceUID(record);
@@ -116,7 +115,7 @@ public class DicomdirLoader extends DicomLoader {
                         */
 
                         File referencedFile = (null != parentPath ? new File(parentPath) : new File(".")); // Start relative to DICOMDIR
-                        String[] referencedFileId = record.getStrings(TagUtils.toTag(0x0004, 0x1500));
+                        String[] referencedFileId = recordInSequence.getStrings(TagUtils.toTag(0x0004, 0x1500));
                         if (null != referencedFileId) {
                             for (String part : referencedFileId) {
                                 referencedFile = new File(referencedFile, part);
@@ -142,8 +141,8 @@ public class DicomdirLoader extends DicomLoader {
 
                     case "IMAGE": {
                         // In case information is replicated
-                        assign(data, "PatientID", DicomElement.patientID(record));
-                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(record));
+                        assign(data, "PatientID", DicomElement.patientID(recordInSequence));
+                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(recordInSequence));
 
                         /*
                         String sopInstanceUid = DicomObject.sopInstanceUID(record);
@@ -152,7 +151,7 @@ public class DicomdirLoader extends DicomLoader {
                         */
 
                         File referencedFile = (null != parentPath ? new File(parentPath) : new File(".")); // Start relative to DICOMDIR
-                        String[] referencedFileId = record.getStrings(TagUtils.toTag(0x0004, 0x1500));
+                        String[] referencedFileId = recordInSequence.getStrings(TagUtils.toTag(0x0004, 0x1500));
                         if (null != referencedFileId) {
                             for (String part : referencedFileId) {
                                 referencedFile = new File(referencedFile, part);
@@ -185,14 +184,14 @@ public class DicomdirLoader extends DicomLoader {
                     break;
 
                     case "SERIES":
-                        String seriesInstanceUid = DicomElement.seriesInstanceUID(record);
-                        String seriesDescription = DicomElement.seriesDescription(record);
+                        String seriesInstanceUid = DicomElement.seriesInstanceUID(recordInSequence);
+                        String seriesDescription = DicomElement.seriesDescription(recordInSequence);
                         // fall through
 
                     default:
                         // In case information is replicated
-                        assign(data, "PatientID", DicomElement.patientID(record));
-                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(record));
+                        assign(data, "PatientID", DicomElement.patientID(recordInSequence));
+                        assign(data, "StudyInstanceUID", DicomElement.studyInstanceUID(recordInSequence));
                         break;
                 }
             }

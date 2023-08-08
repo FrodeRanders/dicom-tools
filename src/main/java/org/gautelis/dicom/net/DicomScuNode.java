@@ -64,8 +64,8 @@ public class DicomScuNode extends DicomNode implements AutoCloseable {
         // Credentials (if appropriate)
         String username = dicomConfig.username();
         String password = dicomConfig.password();
-        if (null != username && username.length() > 0
-                && null != password && password.length() > 0) {
+        if (null != username && !username.isEmpty()
+                && null != password && !password.isEmpty()) {
             rq.setUserIdentityRQ(UserIdentityRQ.usernamePasscode(username, password.toCharArray(), true));
         }
     }

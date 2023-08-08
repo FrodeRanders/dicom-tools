@@ -59,11 +59,11 @@ public class DicomElement {
             // We have no SOP class UID. If we are a DICOMDIR, we should have a
             // directory record type instead.
             String recordType = directoryRecordType(attributes);
-            if (null != recordType && recordType.length() > 0) {
+            if (null != recordType && !recordType.isEmpty()) {
                 description = recordType;
             } else {
                 description = id;
-                if (description.length() > 0) {
+                if (!description.isEmpty()) {
                     description += " ";
                 }
                 description += name;
@@ -604,7 +604,7 @@ public class DicomElement {
     public String asText(boolean recurse, String prefix) {
         StringBuilder text = new StringBuilder(prefix);
         text.append("[");
-        if (null == id || id.length() == 0) {
+        if (null == id || id.isEmpty()) {
             text.append(name).append(" : ");
         }
         text.append(description).append("]").append("\n");

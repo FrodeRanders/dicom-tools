@@ -36,7 +36,7 @@ public class DicomAssociation implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(DicomAssociation.class);
 
     private final String id;
-    private Association association = null;
+    private Association association;
     private final DicomNode node;
 
     public DicomAssociation(String id, Association association, DicomNode node) {

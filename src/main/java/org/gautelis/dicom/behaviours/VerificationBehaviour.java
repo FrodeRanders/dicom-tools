@@ -82,22 +82,20 @@ public class VerificationBehaviour {
         });
 
         // We will accept verfication queries as SCP as well
-        scpNode.withServiceRegistry(registry -> {
-            registry.addDicomService(new BasicCEchoSCP() {
-                @Override
-                public void onDimseRQ(
-                        Association as, PresentationContext pc, Dimse dimse, Attributes cmd, Attributes data) throws IOException {
+        scpNode.withServiceRegistry(registry -> registry.addDicomService(new BasicCEchoSCP() {
+            @Override
+            public void onDimseRQ(
+                    Association as, PresentationContext pc, Dimse dimse, Attributes cmd, Attributes data) throws IOException {
 
-                    log.debug("Got " + dimse.name());  // Logs SCP side reception of PING
+                log.debug("Got " + dimse.name());  // Logs SCP side reception of PING
 
-                    if (dimse != Dimse.C_ECHO_RQ) {
-                        log.warn("Unrecognized operation: {}", dimse);
-                        throw new DicomServiceException(Status.UnrecognizedOperation);
-                    }
-                    as.tryWriteDimseRSP(pc, Commands.mkEchoRSP(cmd, Status.Success));
+                if (dimse != Dimse.C_ECHO_RQ) {
+                    log.warn("Unrecognized operation: {}", dimse);
+                    throw new DicomServiceException(Status.UnrecognizedOperation);
                 }
-            });
-        });
+                as.tryWriteDimseRSP(pc, Commands.mkEchoRSP(cmd, Status.Success));
+            }
+        }));
     }
 
     public boolean verify() {

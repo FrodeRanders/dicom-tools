@@ -242,9 +242,7 @@ public class DicomNavigator extends DefaultNavigator {
         } else if (contextNode instanceof DicomAttribute) {
             DicomElement owner = ((DicomAttribute)contextNode).getOwner();
 
-            Iterator<DicomAttribute> dit = owner.getDicomElements().iterator();
-            while (dit.hasNext()) {
-                DicomAttribute sibling = dit.next();
+            for (DicomAttribute sibling : owner.getDicomElements()) {
                 if (!sibling.equals(contextNode)) {
                     list.add(sibling);
                 } else {

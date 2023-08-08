@@ -25,7 +25,7 @@ import org.dcm4che3.util.TagUtils;
  */
 public class DicomAttribute {
 
-    protected static ElementDictionary dict = ElementDictionary.getStandardElementDictionary();
+    protected static final ElementDictionary dict = ElementDictionary.getStandardElementDictionary();
 
     private final int tag;
     private final VR vr;
