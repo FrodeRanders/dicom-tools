@@ -29,8 +29,8 @@ import org.gautelis.vopn.lang.ConfigurationTool;
 import java.util.Properties;
 
 public class Controller implements AutoCloseable {
-//
-private final Configuration dicomConfig;
+    //
+    private final Configuration dicomConfig;
 
     private final DicomScuNode scuNode;
     private final DicomScpNode scpNode;
