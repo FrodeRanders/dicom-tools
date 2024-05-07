@@ -130,7 +130,7 @@ public class DicomNavigator extends DefaultNavigator {
         return null;
     }
 
-    public Iterator getChildAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator getChildAxisIterator(Object contextNode) {
         if (contextNode instanceof DicomDocument) {
             return ((DicomDocument)contextNode).getRootElement().getChildIterator();
 
@@ -144,14 +144,14 @@ public class DicomNavigator extends DefaultNavigator {
         return super.getDescendantAxisIterator(object);
     }
 
-    public Iterator getAttributeAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator getAttributeAxisIterator(Object contextNode) {
         if (contextNode instanceof DicomElement) {
             return ((DicomElement)contextNode).getDicomElements().iterator();
         }
         return JaxenConstants.EMPTY_ITERATOR;
     }
 
-    public Iterator getNamespaceAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator getNamespaceAxisIterator(Object contextNode) {
         return JaxenConstants.EMPTY_ITERATOR;
     }
 
@@ -181,7 +181,7 @@ public class DicomNavigator extends DefaultNavigator {
         return super.getAncestorAxisIterator(contextNode);
     }
 
-    public Iterator getFollowingSiblingAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator getFollowingSiblingAxisIterator(Object contextNode) {
         ArrayList list = new ArrayList();
         if (contextNode instanceof DicomElement) {
             DicomElement parent = ((DicomElement)contextNode).getOwner();
@@ -222,7 +222,7 @@ public class DicomNavigator extends DefaultNavigator {
         return list.iterator();
     }
 
-    public Iterator getPrecedingSiblingAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator getPrecedingSiblingAxisIterator(Object contextNode) {
         ArrayList list = new ArrayList();
         if (contextNode instanceof DicomElement) {
             DicomElement parent = ((DicomElement)contextNode).getOwner();
@@ -263,7 +263,7 @@ public class DicomNavigator extends DefaultNavigator {
         return super.getPrecedingAxisIterator(contextNode);
     }
 
-    public Object getDocument(String uri) throws FunctionCallException {
+    public Object getDocument(String uri) {
         return null;
     }
 
@@ -307,7 +307,7 @@ public class DicomNavigator extends DefaultNavigator {
         return super.getNodeType(node);
     }
 
-    public Object getParentNode(Object contextNode) throws UnsupportedAxisException {
+    public Object getParentNode(Object contextNode) {
         if (contextNode instanceof DicomElement) {
             return ((DicomElement)contextNode).getOwner();
 

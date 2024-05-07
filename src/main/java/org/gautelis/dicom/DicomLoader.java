@@ -51,9 +51,8 @@ public class DicomLoader {
         return new DicomDocument(new DicomElement(name, dataset, parent), name, path);
     };
 
-    public static final StreamLoader defaultStreamLoader = (dataset, name, parent, inputStream) -> {
-        return new DicomDocument(new DicomElement(name, dataset, parent), name, /* no file, so no path */ null);
-    };
+    public static final StreamLoader defaultStreamLoader = (dataset, name, parent, inputStream) ->
+            new DicomDocument(new DicomElement(name, dataset, parent), name, /* no file, so no path */ null);
 
     public DicomLoader() {
     }

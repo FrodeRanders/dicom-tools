@@ -24,8 +24,6 @@ import org.gautelis.vopn.lang.ConfigurationTool;
 import java.util.Properties;
 
 public class Controller implements AutoCloseable {
-    //
-    private final Configuration dicomConfig;
 
     private final DicomScuNode scuNode;
     private final DicomScpNode scpNode;
@@ -35,7 +33,8 @@ public class Controller implements AutoCloseable {
     public Controller(
             final Properties dicomProperties
     ) {
-        dicomConfig = ConfigurationTool.bindProperties(Configuration.class, dicomProperties);
+        //
+        Configuration dicomConfig = ConfigurationTool.bindProperties(Configuration.class, dicomProperties);
 
         // The 'verifier' acts as both a SCU handled by DicomScuNode and
         // as a SCP handled by DicomScpNod, so we need both.
