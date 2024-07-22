@@ -20,6 +20,7 @@
     <log4j.version>2.23.1</log4j.version>
     <slf4j.version>2.0.13</slf4j.version>
     <jaxen.version>2.0.0</jaxen.version>
+
     <vopn.version>2.4-SNAPSHOT</vopn.version> <!-- sibling project -->
   </properties>
 

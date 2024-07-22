@@ -1,4 +1,4 @@
-# Tools and utilities that facilitate the use of dcm4che3
+# Tools and utilities that facilitate the use of dcm4che 5
 
 This software was used to pull structured reports from manual mammography readings from a 
 GE PACS for analysis of inter reader agreement and for statistical analysis of breast 
@@ -7,7 +7,7 @@ data, based on mammography screening of 14.000 women (readings for a year). The 
 was used by General Electrics for baselining and tuning an AI for assisted screening of 
 mammography X-rays.
 
-This software adds some structure on top of dcm4che3 and introduces the notion of 'behaviours'. 
+This software adds some structure on top of dcm4che 5 and introduces the notion of 'behaviours'. 
 The result is a relatively easy setup that lets you focus on the interesting stuff right away,
 without tedious setup. 
 
@@ -195,7 +195,7 @@ public class Controller implements AutoCloseable {
                         String _endDate = org.gautelis.vopn.lang.Date.date2String(endDate, locale).replace("-", "");
                         rangeString += _endDate;
                     }
-                    if (rangeString.length() > 0) {
+                    if (!rangeString.isEmpty()) {
                         keys.setString(tag, vr, rangeString);
                     } else {
                         keys.setNull(tag, vr);
@@ -206,7 +206,7 @@ public class Controller implements AutoCloseable {
                 {
                     int tag = Tag.ModalitiesInStudy; // optionally supported
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    if (null != modality && modality.length() > 0) {
+                    if (null != modality && !modality.isEmpty()) {
                         keys.setString(tag, vr, modality);
                     } else {
                         keys.setNull(tag, vr);
@@ -301,7 +301,7 @@ public class Controller implements AutoCloseable {
                 {
                     int tag = Tag.Modality;
                     VR vr = ElementDictionary.vrOf(tag, keys.getPrivateCreator(tag));
-                    if (null != modality && modality.length() > 0) {
+                    if (null != modality && !modality.isEmpty()) {
                         keys.setString(tag, vr, modality);
                     } else {
                         keys.setNull(tag, vr);
