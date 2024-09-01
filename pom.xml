@@ -16,7 +16,7 @@
     <maven.compiler.source>9</maven.compiler.source>
     <maven.compiler.target>9</maven.compiler.target>
     <args4j.version>2.37</args4j.version>
-    <dcm4che.version>5.32.0</dcm4che.version> <!-- 5.32.1 seems to be broken -->
+    <dcm4che.version>5.32.0</dcm4che.version> <!-- 5.32.1 as well as 5.33.0 seems to be broken -->
     <log4j.version>2.23.1</log4j.version>
     <slf4j.version>2.0.13</slf4j.version>
     <jaxen.version>2.0.0</jaxen.version>
