@@ -121,6 +121,18 @@ public class XPathTest
                 assertEquals("CodeValue", ((DicomAttribute) _node).getName());
                 assertEquals("45_01004001", ((DicomAttribute) _node).getValue());
             }
+
+            // This does not match current test data, but i want to verify the query
+            expr = "//ConceptCodeSequence[ancestor::ContentSequence/ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710'] and preceding-sibling::ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710'] and following-sibling::ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020']]";
+            //System.out.println("Using XPath expression: " + expr);
+            xpath = new XPath(expr);
+            nodes = xpath.selectNodes(dicomElement);
+            for (Object _node : nodes) {
+                System.out.println("Found DicomAttribute:\n" + ((DicomAttribute)_node).asText(DicomElement.INDENT));
+                //assertEquals("CodeValue", ((DicomAttribute) _node).getName());
+                //assertEquals("45_01004001", ((DicomAttribute) _node).getValue());
+            }
+
         } catch (Throwable t) {
             String info = "Failed: " + t.getMessage();
             log.warn(info, t);

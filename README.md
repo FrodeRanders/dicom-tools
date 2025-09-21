@@ -561,16 +561,14 @@ Consider this tree-structured snippet of a structured report:
 
 We want to extract the (estimated) overall breast composition using the SNOMED-RT vocabulary.
 This XPath expression would be accurate, matching a great many details from the tree above
-(and I am really sorry that it does not wrap :)
 ```
-//ConceptCodeSequence[(../../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) and (../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) and (../ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020'])]
-```
-
-This expression can be simplified, but the more you remove from the expression, the
-higher the risk of getting matches in other parts of the tree. I think, the following
-expression would suffice:
-```
-//ConceptCodeSequence[(../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) and (../ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020'])]
+//ConceptCodeSequence[
+  (../../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) 
+  and 
+  (../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) 
+  and 
+  (../ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020'])
+]
 ```
 
 Going into some detail:
@@ -585,6 +583,17 @@ Going into some detail:
 1. having two matching attributes
    - `@CodingSchemeDesignator='SNM3'` and
    - `@CodeValue='T-04020'`
+
+This is a variation of the preceding XPath query:
+```
+//ConceptCodeSequence[
+  ancestor::ContentSequence/ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']
+  and
+  preceding-sibling::ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710'] 
+  and
+  following-sibling::ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020'] 
+]
+```
 
 For more details on how to form XPath expressions, I kindly refer you to [Google](http://lmgtfy.com/?q=XPath+expressions).
 
@@ -601,7 +610,7 @@ DicomElement rootElement = doc.getDicomObject();
 
 String expr = "//ConceptCodeSequence[(../../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) and (../ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710']) and (../ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020'])]";
 XPath xpath = new XPath(expr);
-System.out.println("Seairching right breast density using: " + xpath.toString() + "\n -> " + xpath.debug());
+System.out.println("Searching right breast density using: " + xpath.toString() + "\n -> " + xpath.debug());
 List nodes = xpath.selectNodes(rootElement);
 for (Object node : nodes) {
    // We are matching on a DicomElement and not an individual attribute, so
