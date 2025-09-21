@@ -16,8 +16,8 @@
     <maven.compiler.source>9</maven.compiler.source>
     <maven.compiler.target>9</maven.compiler.target>
     <args4j.version>2.37</args4j.version>
-    <dcm4che.version>5.33.0</dcm4che.version> 
-    <log4j.version>2.24.3</log4j.version>
+    <dcm4che.version>5.34.1</dcm4che.version>
+    <log4j.version>2.25.1</log4j.version>
     <slf4j.version>2.0.17</slf4j.version>
     <jaxen.version>2.0.0</jaxen.version>
 
@@ -129,5 +129,29 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+    <profiles>
+        <profile>
+            <id>deps</id>          <!-- mvn -Pdeps validate -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>versions-maven-plugin</artifactId>
+                        <version>2.18.0</version>
+                        <executions>
+                            <execution>
+                                <id>show‑updates</id>
+                                <phase>validate</phase>   <!-- any phase works; validate is fast -->
+                                <goals>
+                                    <goal>display-dependency-updates</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
