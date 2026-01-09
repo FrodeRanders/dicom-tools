@@ -117,6 +117,16 @@ public class DicomElement {
         return actualValue.toString();
     }
 
+    private void appendStrings(StringBuilder value, Object stringValues) {
+        if (stringValues instanceof String[]) {
+            for (String s : (String[]) stringValues) {
+                value.append(s).append(", ");
+            }
+        } else {
+            value.append(stringValues);
+        }
+    }
+
     public String getSopClassUID() {
         return sopClassUID(attributes);
     }
@@ -264,13 +274,7 @@ public class DicomElement {
                             // StringValueType.IS
                         {
                             Object o = vr.toStrings(_value, isBE, characterSet);
-                            if (o instanceof String[]) {
-                                for (String s : (String[]) o) {
-                                    value.append(s).append(", ");
-                                }
-                            } else {
-                                value.append(o);
-                            }
+                            appendStrings(value, o);
                         }
                         break;
 
@@ -281,13 +285,7 @@ public class DicomElement {
                             // StringValueType.STRING
                         {
                             Object o = vr.toStrings(_value, isBE, characterSet);
-                            if (o instanceof String[]) {
-                                for (String s : (String[]) o) {
-                                    value.append(s).append(", ");
-                                }
-                            } else {
-                                value.append(o);
-                            }
+                            appendStrings(value, o);
                         }
                         break;
 
@@ -347,13 +345,7 @@ public class DicomElement {
                                     }
                                     */
                             Object o = vr.toStrings(_value, isBE, characterSet);
-                            if (o instanceof String[]) {
-                                for (String s : (String[]) o) {
-                                    value.append(s).append(", ");
-                                }
-                            } else {
-                                value.append(o);
-                            }
+                            appendStrings(value, o);
                         }
                         break;
 
@@ -389,13 +381,7 @@ public class DicomElement {
                             // StringValueType.DS
                         {
                             Object o = vr.toStrings(_value, isBE, characterSet);
-                            if (o instanceof String[]) {
-                                for (String s : (String[]) o) {
-                                    value.append(s).append(", ");
-                                }
-                            } else {
-                                value.append(o);
-                            }
+                            appendStrings(value, o);
                         }
                         break;
 
@@ -418,13 +404,7 @@ public class DicomElement {
                             // BinaryValueType.FLOAT
                         {
                             Object o = vr.toStrings(_value, isBE, characterSet);
-                            if (o instanceof String[]) {
-                                for (String s : (String[]) o) {
-                                    value.append(s).append(", ");
-                                }
-                            } else {
-                                value.append(o);
-                            }
+                            appendStrings(value, o);
                         }
                         break;
 
@@ -436,13 +416,7 @@ public class DicomElement {
                             // BinaryValueType.INT
                         {
                             Object o = vr.toStrings(_value, isBE, characterSet);
-                            if (o instanceof String[]) {
-                                for (String s : (String[]) o) {
-                                    value.append(s).append(", ");
-                                }
-                            } else {
-                                value.append(o);
-                            }
+                            appendStrings(value, o);
                         }
                         break;
 

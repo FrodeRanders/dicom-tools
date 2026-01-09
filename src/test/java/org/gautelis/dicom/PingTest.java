@@ -45,8 +45,6 @@ public class PingTest
 
     @Test
     public void testPing() {
-        System.out.println("---");
-
         final Properties dicomConfig = new Properties();
 
         // SCU / client-side configuration
@@ -72,7 +70,6 @@ public class PingTest
 
         try (Controller controller = new Controller(dicomConfig)) {
             assertTrue(controller.ping());
-            System.out.println("PING!");
         }
         catch (Throwable t) {
             fail(t.getMessage());

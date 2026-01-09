@@ -184,10 +184,6 @@ public class DicomdirLoader extends DicomLoader {
                     break;
 
                     case "SERIES":
-                        String seriesInstanceUid = DicomElement.seriesInstanceUID(recordInSequence);
-                        String seriesDescription = DicomElement.seriesDescription(recordInSequence);
-                        // fall through
-
                     default:
                         // In case information is replicated
                         assign(data, "PatientID", DicomElement.patientID(recordInSequence));

@@ -39,7 +39,6 @@ public class XPathTest
 
     @Test
     public void testXPath() {
-        System.out.println("---");
         String name = "DICOMDIR";
 
         try (InputStream is = getClass().getResourceAsStream(name)) {
@@ -59,51 +58,41 @@ public class XPathTest
 
             // Get root element (DicomElement) -- typically a DICOMDIR
             String expr = "/";
-            System.out.println("Using XPath expression: " + expr);
             XPath xpath = new XPath(expr);
             Object node = xpath.selectSingleNode(dicomElement);
             if (null != node) {
-                System.out.println("Found DicomElement:\n" + ((DicomElement)node).asText(/* recurse? */ false, DicomElement.INDENT));
                 assertEquals(dicomElement, node);
             }
 
             // Get all elements (DicomElement) named 'ConceptNameCodeSequence'
             expr = "//ConceptNameCodeSequence";
-            System.out.println("Using XPath expression: " + expr);
             xpath = new XPath(expr);
             List<?> nodes = xpath.selectNodes(dicomElement);
             for (Object _node : nodes) {
-                System.out.println("Found DicomElement:\n" + ((DicomElement)_node).asText(/* recurse? */ false, DicomElement.INDENT));
                 assertEquals("ConceptNameCodeSequence", ((DicomElement) _node).getName());
             }
 
             // Get all attributes (DicomAttribute) named 'CodeValue' in element named 'ConceptNameCodeSequence'
             expr = "//ConceptNameCodeSequence/@CodeValue";
-            System.out.println("Using XPath expression: " + expr);
             xpath = new XPath(expr);
             nodes = xpath.selectNodes(dicomElement);
             for (Object _node : nodes) {
-                System.out.println("Found DicomAttribute:\n" + ((DicomAttribute)_node).asText(DicomElement.INDENT));
                 assertEquals("CodeValue", ((DicomAttribute) _node).getName());
             }
 
             // Get all elements (DicomElement) named 'ConceptNameCodeSequence' having an attribute named 'CodeValue' with a value of '45_01004001'
             expr = "//ConceptNameCodeSequence[@CodeValue='45_01004001']";
-            System.out.println("Using XPath expression: " + expr);
             xpath = new XPath(expr);
             nodes = xpath.selectNodes(dicomElement);
             for (Object _node : nodes) {
-                System.out.println("Found DicomElement:\n" + ((DicomElement)_node).asText(/* recurse? */ false, DicomElement.INDENT));
                 assertEquals("ConceptNameCodeSequence", ((DicomElement) _node).getName());
             }
 
             // Get all attributes (DicomAttribute) named 'CodeValue' in elements named 'ConceptNameCodeSequence' having a value of '45_01004001'
             expr = "//ConceptNameCodeSequence[@CodeValue='45_01004001']/@CodeValue";
-            System.out.println("Using XPath expression: " + expr);
             xpath = new XPath(expr);
             nodes = xpath.selectNodes(dicomElement);
             for (Object _node : nodes) {
-                System.out.println("Found DicomAttribute:\n" + ((DicomAttribute)_node).asText(DicomElement.INDENT));
                 assertEquals("CodeValue", ((DicomAttribute) _node).getName());
                 assertEquals("45_01004001", ((DicomAttribute) _node).getValue());
             }
@@ -113,22 +102,18 @@ public class XPathTest
             // value of '99_PHILIPS'
             //
             expr = "//ConceptNameCodeSequence[@CodeValue='45_01004001' and @CodingSchemeDesignator='99_PHILIPS']/@CodeValue";
-            System.out.println("Using XPath expression: " + expr);
             xpath = new XPath(expr);
             nodes = xpath.selectNodes(dicomElement);
             for (Object _node : nodes) {
-                System.out.println("Found DicomAttribute:\n" + ((DicomAttribute)_node).asText(DicomElement.INDENT));
                 assertEquals("CodeValue", ((DicomAttribute) _node).getName());
                 assertEquals("45_01004001", ((DicomAttribute) _node).getValue());
             }
 
             // This does not match current test data, but i want to verify the query
             expr = "//ConceptCodeSequence[ancestor::ContentSequence/ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710'] and preceding-sibling::ConceptNameCodeSequence[@CodingSchemeDesignator='SRT' and @CodeValue='F-01710'] and following-sibling::ContentSequence/ConceptCodeSequence[@CodingSchemeDesignator='SNM3' and @CodeValue='T-04020']]";
-            //System.out.println("Using XPath expression: " + expr);
             xpath = new XPath(expr);
             nodes = xpath.selectNodes(dicomElement);
             for (Object _node : nodes) {
-                System.out.println("Found DicomAttribute:\n" + ((DicomAttribute)_node).asText(DicomElement.INDENT));
                 //assertEquals("CodeValue", ((DicomAttribute) _node).getName());
                 //assertEquals("45_01004001", ((DicomAttribute) _node).getValue());
             }
