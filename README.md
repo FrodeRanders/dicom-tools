@@ -19,6 +19,42 @@ have to operate as an SCP as well as an SCU. The analysis software thus has to e
 capabilities for "storing" the structured reports. Of course, the software was doing 
 statistical analysis on the data stream instead of actually storing it.
 
+## Quick Start
+```bash
+mvn test
+mvn package
+```
+
+Minimal SCU/SCP properties (example):
+```properties
+local-scu-application-entity=MY_SCU
+local-scp-application-entity=MY_SCP
+local-scp-host=localhost
+local-scp-port=4101
+remote-application-entity=MY_SCP
+remote-host=localhost
+remote-port=4101
+accepted-calling-aets=MY_SCU
+```
+
+## Testing
+- Tests run in-process using localhost AEs and ports (see `src/test/java`).
+- `mvn test` exercises loaders, XPath, and local SCU/SCP round trips.
+
+## Configuration Reference
+- `local-scu-application-entity`: AE title used by the client (SCU).
+- `local-scp-application-entity`: AE title used by the local server (SCP).
+- `local-scp-host` / `local-scp-port`: local SCP bind address/port.
+- `remote-application-entity`: AE title of the remote SCP.
+- `remote-host` / `remote-port`: remote SCP host/port to connect to.
+- `accepted-calling-aets`: comma-separated AE titles accepted by the SCP.
+- `storage-directory`: output location for stored instances (defaults to `./STORAGE`).
+
+## Troubleshooting
+- "No Presentation Context": ensure SCU/SCP transfer syntaxes align and roles match.
+- "Move destination unknown": the C-MOVE destination AE must be configured and accepted.
+- Port bind errors: ensure the port is free and not used by another SCP.
+
 ## Setting up a SCU/SCP-pair and ping! beetween them
 ```java
 import org.gautelis.dicom.behaviours.VerificationBehaviour;
