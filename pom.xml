@@ -16,10 +16,10 @@
     <maven.compiler.source>9</maven.compiler.source>
     <maven.compiler.target>9</maven.compiler.target>
     <args4j.version>2.37</args4j.version>
-    <dcm4che.version>5.34.1</dcm4che.version> <!-- 5.34.2&3 is fishy -->
+    <dcm4che.version>5.34.3</dcm4che.version>
     <log4j.version>2.25.4</log4j.version>
     <slf4j.version>2.0.17</slf4j.version>
-    <jaxen.version>2.0.0</jaxen.version>
+    <jaxen.version>2.0.1</jaxen.version>
 
     <vopn.version>3.0-SNAPSHOT</vopn.version> <!-- sibling project -->
   </properties>
@@ -80,7 +80,7 @@
       </exclusions>
     </dependency>
 
-    <!-- dcm4che3 -->
+    <!-- dcm4che -->
     <dependency>
       <groupId>org.dcm4che</groupId>
       <artifactId>dcm4che-core</artifactId>
@@ -153,5 +153,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
